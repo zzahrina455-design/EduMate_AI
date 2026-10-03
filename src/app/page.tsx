@@ -304,7 +304,7 @@ export default function LandingPage() {
             Ada Pertanyaan atau Ingin <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Bekerja Sama?</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-            Tim EduMate AI siap membantu pendaftaran institusi kampus, bantuan teknis, maupun konsultasi integrasi sistem RAG.
+            Tim EduMate AI siap membantu dan menemani kalian dalam belajar.
           </p>
         </div>
 
@@ -318,7 +318,7 @@ export default function LandingPage() {
                 <Mail className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
                 <div>
                   <span className="block font-semibold text-white">Email Resmi</span>
-                  <span>support@edumate.ai</span>
+                  <span>edumate ai@gmail.com</span>
                 </div>
               </div>
 
@@ -326,7 +326,7 @@ export default function LandingPage() {
                 <Phone className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
                 <div>
                   <span className="block font-semibold text-white">Layanan Telepon / WhatsApp</span>
-                  <span>+62 812-3456-7890</span>
+                  <span>+62 ...........</span>
                 </div>
               </div>
 
@@ -334,7 +334,7 @@ export default function LandingPage() {
                 <MapPin className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
                 <div>
                   <span className="block font-semibold text-white">Kantor Pusat</span>
-                  <span>Gedung Cyber Akademik Lt. 4, Jakarta Selatan, Indonesia</span>
+                  <span>Universitas Sebelas Maret</span>
                 </div>
               </div>
 
