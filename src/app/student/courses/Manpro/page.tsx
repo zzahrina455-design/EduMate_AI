@@ -7,8 +7,7 @@ import {
   BookOpen, 
   MessageSquareText, 
   History, 
-  User, 
-  ChevronDown, 
+  User,
   FileText, 
   Video, 
   Plus, 
@@ -17,8 +16,7 @@ import {
   StickyNote, 
   X, 
   CheckCircle2, 
-  Trash2, 
-  ChevronRight
+  Trash2
 } from 'lucide-react';
 
 interface NoteItem {
@@ -49,12 +47,12 @@ export default function CourseDetailPage() {
     if (!year || !month || !day) return dateString;
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
-    const monthIndex = parseInt(month, 10) - 1;
-    return `${parseInt(day, 10)} ${months[monthIndex] || month} ${year}`;
+    const monthIndex = Number(month) - 1;
+    return `${Number(day)} ${months[monthIndex] || month} ${year}`;
   };
 
   // Function Tambah Catatan Baru
-  const handleAddNote = (e: React.FormEvent) => {
+  const handleAddNote = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
 
@@ -103,7 +101,10 @@ export default function CourseDetailPage() {
 
         {/* Akses Cepat Kanan */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all">
+          <button 
+            type="button" 
+            className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all text-left"
+          >
             <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40">
               ZZ
             </div>
@@ -111,8 +112,7 @@ export default function CourseDetailPage() {
               <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
               <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
             </div>
-            <ChevronDown size={13} className="text-blue-300/50" />
-          </div>
+          </button>
         </div>
       </header>
 
@@ -241,8 +241,8 @@ export default function CourseDetailPage() {
                 { title: 'Bagaimana cara menyusun Work Breakdown Structure (WBS)?', time: '23 Sep 2026 • 14:32' },
                 { title: 'Apa perbedaan metode Agile dan Waterfall?', time: '22 Sep 2026 • 16:21' },
                 { title: 'Penjelasan Critical Path Method dalam jadwal proyek', time: '20 Sep 2026 • 10:15' },
-              ].map((item, idx) => (
-                <div key={idx} className="p-2.5 rounded-xl bg-slate-950/40 border border-blue-500/10 hover:border-cyan-400/30 cursor-pointer flex items-center justify-between transition-all">
+              ].map((item) => (
+                <div key={item.title} className="p-2.5 rounded-xl bg-slate-950/40 border border-blue-500/10 hover:border-cyan-400/30 cursor-pointer flex items-center justify-between transition-all">
                   <div className="min-w-0 pr-2">
                     <p className="text-[11px] font-medium text-white truncate">{item.title}</p>
                     <span className="text-[9px] text-blue-300/50 block mt-0.5">{item.time}</span>
@@ -353,10 +353,11 @@ export default function CourseDetailPage() {
             {/* Modal Form Input */}
             <form onSubmit={handleAddNote} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-blue-200 mb-1">
+                <label htmlFor="noteTitle" className="block text-xs font-semibold text-blue-200 mb-1">
                   Judul Catatan / Tugas <span className="text-red-400">*</span>
                 </label>
                 <input
+                  id="noteTitle"
                   type="text"
                   required
                   placeholder="Contoh: Kerjakan Modul 2 & Ringkasan Sprint..."
@@ -367,11 +368,11 @@ export default function CourseDetailPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-blue-200 mb-1">
+                <label htmlFor="noteDate" className="block text-xs font-semibold text-blue-200 mb-1">
                   Batas Waktu / Tanggal (Pilih dari Kalender)
                 </label>
-                {/* Input Date Picker bawaan HTML5 yang disesuaikan dengan Dark Mode */}
                 <input
+                  id="noteDate"
                   type="date"
                   value={newDate}
                   onChange={(e) => setNewDate(e.target.value)}
