@@ -164,10 +164,6 @@ export default function KelolaUserPage() {
             </Link>
           </nav>
         </div>
-
-        <div className="pt-4 border-t border-blue-500/15 text-center text-[10px] text-blue-300/40">
-          EduMate AI Admin
-        </div>
       </aside>
 
       {/* ================= 2. AREA KONTEN UTAMA ================= */}
@@ -190,7 +186,6 @@ export default function KelolaUserPage() {
                 T
               </div>
               <span className="text-xs font-bold text-white">Admin</span>
-              <ChevronDown size={14} className="text-blue-300/60" />
             </div>
 
             <button
