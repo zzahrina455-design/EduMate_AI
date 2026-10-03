@@ -36,9 +36,9 @@ export default function CoursesPage() {
   // Data 8 Mata Kuliah sesuai Gambar Mockup
   const coursesData: Courses[] = [
     {
-      id: '1',
-      title: 'Basis Data',
-      lecturer: 'Dr. Budi Santoso, S.Kom., M.Kom.',
+      id: 'Py',
+      title: 'Python',
+      lecturer: 'Masbahah',
       materialsCount: 12,
       progress: 75,
       type: 'database'
@@ -52,49 +52,49 @@ export default function CoursesPage() {
       type: 'web'
     },
     {
-      id: '3',
-      title: 'Kecerdasan Buatan',
-      lecturer: 'Prof. Dr. Andi Wijaya, S.T., M.T.',
+      id: 'Fr',
+      title: 'Frontend',
+      lecturer: 'Darmawan Lahru Riatma, S.Kom., M.MT.',
       materialsCount: 12,
       progress: 80,
       type: 'ai'
     },
     {
-      id: '4',
-      title: 'Pemrograman Berorientasi Objek',
-      lecturer: 'Siti Rahma, S.Kom., M.T.',
+      id: 'Pmi',
+      title: 'Pemrograman Multimedia Interaktif',
+      lecturer: 'Rifa Khoirunnisa',
       materialsCount: 10,
       progress: 70,
       type: 'oop'
     },
     {
-      id: '5',
-      title: 'Jaringan Komputer',
-      lecturer: 'Ahmad Fauzi, S.T., M.Eng.',
+      id: 'Cs',
+      title: 'Cyber Security',
+      lecturer: 'Ahmad Faisal Sani',
       materialsCount: 8,
       progress: 65,
       type: 'network'
     },
     {
-      id: '6',
-      title: 'Sistem Operasi',
-      lecturer: 'Dewi Lestari, S.Kom., M.T.',
+      id: 'Iot',
+      title: 'Inthernet Of Things',
+      lecturer: 'Yusuf Fadhillah Rachman',
       materialsCount: 10,
       progress: 60,
       type: 'os'
     },
     {
-      id: '7',
-      title: 'Analisis dan Perancangan Sistem',
-      lecturer: 'Fajar Nugroho, S.T., M.T.',
+      id: 'Ka',
+      title: 'Komputasi Awan',
+      lecturer: 'Ahmad Faisal Sani',
       materialsCount: 8,
       progress: 55,
       type: 'system'
     },
     {
-      id: '8',
-      title: 'Kewarganegaraan',
-      lecturer: 'Sri Mulyani, S.Pd., M.Pd.',
+      id: 'Pi',
+      title: 'Penulisan Ilmiah',
+      lecturer: 'Masbahah',
       materialsCount: 6,
       progress: 40,
       type: 'civics'

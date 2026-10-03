@@ -27,7 +27,7 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e: React.ChangeEvent) => {
     e.preventDefault();
     setContactSubmitted(true);
     setTimeout(() => setContactSubmitted(false), 5000);

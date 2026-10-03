@@ -129,15 +129,15 @@ export default function CourseDetailPage() {
 
             <Link href="/student/courses" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30">
               <BookOpen size={17} className="text-white" />
-              <span>Manajemen Proyek</span>
+              <span>Penulisan Ilmiah</span>
             </Link>
 
-            <Link href="/student/chat/Manpro" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
+            <Link href="/student/chat/Pi" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
               <MessageSquareText size={17} className="text-blue-300/60" />
               <span>Tanya AI</span>
             </Link>
 
-            <Link href="/student/history/Manpro" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
+            <Link href="/student/history/Pi" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
               <History size={17} className="text-blue-300/60" />
               <span>Riwayat</span>
             </Link>
@@ -152,7 +152,7 @@ export default function CourseDetailPage() {
         {/* KOLOM 2: KONTEN UTAMA MATA KULIAH (TENGAH) */}
         <main className="flex-1 flex flex-col min-w-0 space-y-5 overflow-y-auto pr-1">
           
-          {/* Header Banner Manajemen Proyek */}
+          {/* Header Banner Penulisan Ilmiah */}
           <div className="relative rounded-3xl bg-slate-900/80 border border-blue-500/20 p-6 overflow-hidden shadow-2xl">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
               <div className="space-y-2">
@@ -161,10 +161,10 @@ export default function CourseDetailPage() {
                     <Code2 size={26} />
                   </div>
                   <div>
-                    <h1 className="text-2xl md:text-3xl font-extrabold text-white">Manajemen Proyek</h1>
+                    <h1 className="text-2xl md:text-3xl font-extrabold text-white">Penulisan Ilmiah</h1>
                     <p className="text-xs text-blue-200/70 flex items-center gap-1.5 mt-0.5">
                       <User size={12} className="text-cyan-400" />
-                      Darmawan Lahru Riatma, S.Kom., M.MT.
+                      Masbahah
                     </p>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function CourseDetailPage() {
               <span>Deskripsi Mata Kuliah</span>
             </div>
             <p className="text-xs text-blue-200/80 leading-relaxed">
-              Mata kuliah Manajemen Proyek mempelajari konsep, metode, dan teknik dalam merencanakan, melaksanakan, memantau, serta mengevaluasi suatu proyek agar dapat mencapai tujuan sesuai dengan ruang lingkup, waktu, biaya, dan kualitas yang telah ditetapkan. Mahasiswa mempelajari penyusunan rencana proyek, identifikasi kebutuhan dan pemangku kepentingan, pembagian tugas, pengelolaan sumber daya, manajemen risiko, serta pengawasan dan evaluasi proyek. Melalui mata kuliah ini, mahasiswa diharapkan mampu menerapkan prinsip manajemen proyek dalam pengembangan sistem informasi dan teknologi, bekerja sama dalam tim, serta menghasilkan proyek yang terstruktur dan sesuai dengan kebutuhan pengguna.
+              Mata kuliah Penulisan Ilmiah membahas konsep, prinsip, dan teknik penyusunan karya ilmiah secara sistematis, logis, objektif, dan sesuai dengan kaidah akademik. Mahasiswa mempelajari cara menentukan topik dan rumusan masalah, mencari serta mengelola sumber referensi, menyusun kerangka tulisan, melakukan sitasi dan daftar pustaka, serta menyajikan hasil penelitian atau kajian dalam bentuk karya ilmiah. Mata kuliah ini juga melatih kemampuan mahasiswa dalam menggunakan bahasa Indonesia yang baik dan benar, berpikir kritis, menghindari plagiarisme, serta menghasilkan tulisan ilmiah yang dapat dipertanggungjawabkan secara akademik.
             </p>
           </div>
 
@@ -194,11 +194,11 @@ export default function CourseDetailPage() {
 
             <div className="space-y-2.5">
               {[
-                { id: 1, title: '1. Pengenalan Manajemen Proyek & Agile', desc: 'Modul • PDF (2.4 MB)', date: '12 Sep 2026', completed: true, type: 'pdf' },
-                { id: 2, title: '2. Project Charter & Scope Management', desc: 'Modul • PDF (3.1 MB)', date: '15 Sep 2026', completed: true, type: 'pdf' },
-                { id: 3, title: '3. Work Breakdown Structure (WBS)', desc: 'Video • MP4 (45 MB)', date: '18 Sep 2026', completed: false, type: 'video' },
-                { id: 4, title: '4. Estimasi Biaya & Jadwal Proyek', desc: 'Materi • PPT (1.8 MB)', date: '22 Sep 2026', completed: false, type: 'ppt' },
-                { id: 5, title: '5. Risk Management & Quality Assurance', desc: 'Modul • PDF (2.7 MB)', date: '25 Sep 2026', completed: false, type: 'pdf' },
+                { id: 1, title: '1. Pengenalan Penulisan Ilmiah', desc: 'Modul • PDF (2.4 MB)', date: '12 Sep 2026', completed: true, type: 'pdf' },
+                { id: 2, title: '2. Menentukan Topik & Rumusan Masalah', desc: 'Modul • PDF (3.1 MB)', date: '15 Sep 2026', completed: true, type: 'pdf' },
+                { id: 3, title: '3. Studi Literatur & Pencarian Referensi', desc: 'Video • MP4 (45 MB)', date: '18 Sep 2026', completed: false, type: 'video' },
+                { id: 4, title: '4. Sistematika & Struktur Karya Ilmiah', desc: 'Materi • PPT (1.8 MB)', date: '22 Sep 2026', completed: false, type: 'ppt' },
+                { id: 5, title: '5. Sitasi, Daftar Pustaka & Plagiarisme', desc: 'Modul • PDF (2.7 MB)', date: '25 Sep 2026', completed: false, type: 'pdf' },
               ].map((materi) => (
                 <div
                   key={materi.id}

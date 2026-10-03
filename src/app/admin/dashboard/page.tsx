@@ -1,244 +1,397 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
-  Bot, LayoutDashboard, Users, BookOpen, FileText, History, 
-  Settings, LogOut, Search, Code, Database, Cpu, Network, 
-  HardDrive, Shield, Menu, X 
+  GraduationCap, 
+  LayoutDashboard, 
+  Users, 
+  BookOpen, 
+  History, 
+  User, 
+  LogOut, 
+  ChevronDown, 
+  Plus, 
+  UserCheck, 
+  Upload, 
+  UserMinus, 
+  Laptop, 
+  CheckCircle2, 
+  FileText 
 } from 'lucide-react';
 
-export default function AdminDashboard() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const courses = [
-    { name: 'Algoritma dan Pemrograman', icon: Code, code: 'IF110' },
-    { name: 'Basis Data', icon: Database, code: 'IF210' },
-    { name: 'Pemrograman Web', icon: BookOpen, code: 'IF310' },
-    { name: 'Pemrograman Objek', icon: Cpu, code: 'IF220' },
-    { name: 'Jaringan Komputer', icon: Network, code: 'IF320' },
-    { name: 'Sistem Operasi', icon: HardDrive, code: 'IF230' },
-    { name: 'Analisis dan Perancangan Sistem', icon: FileText, code: 'IF330' },
-    { name: 'Kewarganegaraan', icon: Shield, code: 'UNS101' },
-  ];
+export default function TendikDashboardPage() {
+  const router = useRouter();
+  const [activeMenu] = useState('dashboard');
 
   return (
-    <div className="min-h-screen flex text-slate-100 relative bg-[#0A1128]">
-      <div className="absolute top-0 right-0 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      {/* Sidebar Desktop Admin */}
-      <aside className="w-64 glass-card border-r border-white/10 flex-col justify-between hidden lg:flex sticky top-0 h-screen z-30">
-        <div className="p-6 space-y-8">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-              <Bot className="w-6 h-6 text-white" />
+    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex relative overflow-hidden">
+      
+      {/* ================= 1. SIDEBAR KIRI ================= */}
+      <aside className="w-64 bg-slate-950/80 border-r border-blue-500/15 flex flex-col p-4 md:p-6 shrink-0 z-30 backdrop-blur-xl">
+        <div className="space-y-6">
+          
+          {/* Logo EduMate AI */}
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
+              <GraduationCap size={22} />
             </div>
-            <span className="text-xl font-bold tracking-wide bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent">
+            <span className="text-lg font-bold bg-gradient-to-r from-white via-blue-100 to-blue-300 bg-clip-text text-transparent">
               EduMate AI
             </span>
           </div>
 
-          <nav className="space-y-1.5 text-xs font-medium">
-            <Link href="/admin/dashboard" className="flex items-center space-x-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-              <LayoutDashboard className="w-4 h-4" />
+          {/* Navigasi Sidebar */}
+          <nav className="space-y-1.5 pt-2">
+            
+            {/* 1. Dashboard */}
+            <Link
+              href="/admin/dashboard"
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-left ${
+                activeMenu === 'dashboard'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30'
+                  : 'text-blue-200/60 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <LayoutDashboard size={17} />
               <span>Dashboard</span>
             </Link>
-            <Link href="/admin/crud" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-              <Users className="w-4 h-4" />
+
+            {/* 2. Kelola User */}
+            <Link
+              href="/admin/kelola-user"
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
+                activeMenu === 'user'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30'
+                  : 'text-blue-200/60 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <Users size={17} />
               <span>Kelola User</span>
             </Link>
-            <Link href="/admin/courses" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-              <BookOpen className="w-4 h-4" />
-              <span>Kelola Mata Kuliah</span>
-            </Link>
-            <Link href="/admin/documents" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-              <FileText className="w-4 h-4" />
-              <span>Kelola Dokumen</span>
-            </Link>
-            <Link href="/admin/history" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-              <History className="w-4 h-4" />
+
+            {/* 3. Riwayat */}
+            <Link
+              href="/admin/history"
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
+                activeMenu === 'riwayat'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30'
+                  : 'text-blue-200/60 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <History size={17} />
               <span>Riwayat</span>
             </Link>
-            <Link href="/admin/settings" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-              <Settings className="w-4 h-4" />
-              <span>Pengaturan</span>
-            </Link>
-          </nav>
-        </div>
 
-        <div className="p-6 border-t border-white/10">
-          <Link href="/login" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition font-medium text-xs">
-            <LogOut className="w-4 h-4" />
-            <span>Keluar</span>
-          </Link>
+            {/* 4. Profil */}
+            <Link
+              href="/admin/profile"
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
+                activeMenu === 'profil'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30'
+                  : 'text-blue-200/60 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <User size={17} />
+              <span>Profil</span>
+            </Link>
+
+            {/* 6. Keluar */}
+            <button
+              type="button"
+              onClick={() => router.push('/login')}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left"
+            >
+              <LogOut size={17} />
+              <span>Keluar</span>
+            </button>
+
+          </nav>
         </div>
       </aside>
 
-      {/* Sidebar Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/60 backdrop-blur-sm">
-          <div className="w-72 glass-card h-full border-r border-white/15 flex flex-col justify-between p-6 shadow-2xl animate-in slide-in-from-left duration-300">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                    <Bot className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-lg font-bold bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent">
-                    EduMate AI
-                  </span>
-                </div>
-                <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-white p-1">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+      {/* ================= 2. AREA KONTEN UTAMA ================= */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        
+        {/* TOP NAVBAR */}
+        <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-end sticky top-0 z-20">
 
-              <nav className="space-y-2 text-xs font-medium">
-                <Link href="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                  <LayoutDashboard className="w-4 h-4" />
-                  <span>Dashboard</span>
-                </Link>
-                <Link href="/admin/crud" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-                  <Users className="w-4 h-4" />
-                  <span>Kelola User</span>
-                </Link>
-                <Link href="/admin/courses" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-                  <BookOpen className="w-4 h-4" />
-                  <span>Kelola Mata Kuliah</span>
-                </Link>
-                <Link href="/admin/documents" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-                  <FileText className="w-4 h-4" />
-                  <span>Kelola Dokumen</span>
-                </Link>
-                <Link href="/admin/history" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-                  <History className="w-4 h-4" />
-                  <span>Riwayat</span>
-                </Link>
-                <Link href="/admin/settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition">
-                  <Settings className="w-4 h-4" />
-                  <span>Pengaturan</span>
-                </Link>
-              </nav>
-            </div>
-
-            <div className="pt-4 border-t border-white/10">
-              <Link href="/login" className="flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition font-medium text-xs">
-                <LogOut className="w-4 h-4" />
-                <span>Keluar</span>
-              </Link>
-            </div>
-          </div>
-         <button 
+          {/* User Profile Tendik di Pojok Kanan */}
+          <button
             type="button"
-            onClick={() => setMobileMenuOpen(false)} 
-            className="flex-1 bg-transparent border-none cursor-default"
-            aria-label="Tutup menu"
-          />
-        </div>
-      )}
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0">
-        <header className="h-20 glass-card border-b border-white/10 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center space-x-4 w-full sm:w-auto">
-            {/* Tombol Hamburger Mobile */}
-            <button 
-              onClick={() => setMobileMenuOpen(true)} 
-              className="lg:hidden w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan-400 border border-white/10 shrink-0"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-
-            <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input 
-                type="text" 
-                placeholder="Cari di sistem..." 
-                className="w-full glass-input rounded-xl py-2 pl-10 pr-4 text-xs text-slate-100 placeholder-slate-400 transition"
-              />
+            className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl hover:border-cyan-400/40 transition-all"
+          >
+            <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
+              T
             </div>
-          </div>
-
-          <div className="flex items-center space-x-4 shrink-0 pl-2">
-            <div className="flex items-center space-x-3 glass-card px-3 sm:px-4 py-2 rounded-2xl border border-white/10">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xs text-white">
-                AD
-              </div>
-              <span className="text-xs font-semibold text-slate-200 hidden sm:inline">Admin</span>
-            </div>
-          </div>
+            <span className="text-xs font-bold text-white">Tendik</span>
+          </button>
         </header>
 
-        <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 flex-1">
-          <div className="space-y-1">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Halo, Admin 👋</h1>
-            <p className="text-xs text-slate-300">Kelola sistem EduMate AI dengan mudah.</p>
-          </div>
+        {/* KONTEN UTAMA DASHBOARD */}
+        <main className="p-6 space-y-6 max-w-7xl w-full mx-auto">
+          
+          {/* 1. BANNER HEADER UTAMA */}
+          <div className="relative rounded-3xl bg-gradient-to-r from-blue-950/90 via-slate-900/90 to-blue-900/60 border border-blue-500/20 p-6 md:p-8 overflow-hidden shadow-2xl flex items-center justify-between">
+            <div className="space-y-2 max-w-xl z-10">
+              <h1 className="text-2xl md:text-3xl font-extrabold text-white flex items-center gap-2">
+                Halo <span className="animate-bounce">👋</span>
+              </h1>
+              <p className="text-xs text-blue-200/70 font-medium">
+                Selamat datang di halaman tendik.
+              </p>
+              <p className="text-xs text-blue-200/50 leading-relaxed">
+                Kelola data dan sumber belajar EduMate AI dengan mudah dan efisien.
+              </p>
+            </div>
 
-          {/* Stats Cards - Responsif 2 kolom di mobile, 4 kolom di desktop */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center space-x-3 sm:space-x-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase font-semibold text-slate-400">Total User</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white">124</h3>
-              </div>
-            </div>
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center space-x-3 sm:space-x-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase font-semibold text-slate-400">Total Dosen</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white">18</h3>
-              </div>
-            </div>
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center space-x-3 sm:space-x-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase font-semibold text-slate-400">Total Matkul</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white">8</h3>
-              </div>
-            </div>
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center space-x-3 sm:space-x-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase font-semibold text-slate-400">Total Dokumen</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white">56</h3>
+            {/* Gambar Ilustrasi Kanan */}
+            <div className="relative hidden md:flex items-center justify-center w-52 h-32 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.2)] shrink-0">
+              <div className="relative p-4 rounded-xl bg-slate-900/80 border border-cyan-400/40 text-cyan-300 shadow-lg">
+                <Laptop size={40} />
+                <CheckCircle2 size={18} className="absolute -top-2 -right-2 text-emerald-400 bg-slate-950 rounded-full" />
               </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-sm font-semibold text-slate-200 tracking-wide uppercase">Daftar Mata Kuliah</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {courses.map((course) => {
-                const IconComponent = course.icon;
-                return (
-                  <div 
-                    key={course.code} 
-                    className="glass-card glass-card-hover p-5 rounded-2xl border border-white/10 flex flex-col justify-between space-y-6 group cursor-pointer"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
-                      <IconComponent className="w-5 h-5" />
+          {/* 2. GRID 2 KOLOM (RINGKASAN DATA + AKTIVITAS TERBARU) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* KOLOM KIRI: RINGKASAN DATA + GRAFIK (7 Kolom) */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Box Ringkasan Data (4 Stats) */}
+              <div className="bg-slate-900/60 border border-blue-500/20 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+                <h2 className="text-sm font-bold text-white flex items-center gap-2 border-b border-blue-500/15 pb-3">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <span>Ringkasan Data</span>
+                </h2>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {/* Stat 1 */}
+                  <div className="p-3 rounded-2xl bg-slate-950/60 border border-blue-500/15">
+                    <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-cyan-400 flex items-center justify-center mb-2">
+                      <Users size={14} />
                     </div>
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-mono text-cyan-400 font-semibold">{course.code}</span>
-                      <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition leading-snug">{course.name}</h3>
+                    <h4 className="text-lg font-extrabold text-white">124</h4>
+                    <p className="text-[10px] text-blue-200/50">Total User</p>
+                  </div>
+
+                  {/* Stat 2 */}
+                  <div className="p-3 rounded-2xl bg-slate-950/60 border border-blue-500/15">
+                    <div className="w-7 h-7 rounded-lg bg-purple-600/20 text-purple-300 flex items-center justify-center mb-2">
+                      <BookOpen size={14} />
+                    </div>
+                    <h4 className="text-lg font-extrabold text-white">32</h4>
+                    <p className="text-[10px] text-blue-200/50">Mata Kuliah</p>
+                  </div>
+
+                  {/* Stat 3 */}
+                  <div className="p-3 rounded-2xl bg-slate-950/60 border border-blue-500/15">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-600/20 text-emerald-300 flex items-center justify-center mb-2">
+                      <FileText size={14} />
+                    </div>
+                    <h4 className="text-lg font-extrabold text-white">568</h4>
+                    <p className="text-[10px] text-blue-200/50">Total Dokumen</p>
+                  </div>
+
+                  {/* Stat 4 */}
+                  <div className="p-3 rounded-2xl bg-slate-950/60 border border-blue-500/15">
+                    <div className="w-7 h-7 rounded-lg bg-amber-600/20 text-amber-300 flex items-center justify-center mb-2">
+                      <History size={14} />
+                    </div>
+                    <h4 className="text-lg font-extrabold text-white">1.240</h4>
+                    <p className="text-[10px] text-blue-200/50">Aktivitas Hari Ini</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Box Grafik Aktivitas Terbaru */}
+              <div className="bg-slate-900/60 border border-blue-500/20 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-blue-500/15 pb-3">
+                  <h2 className="text-sm font-bold text-white">Aktivitas Terbaru</h2>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950 border border-blue-500/20 text-[10px] font-medium text-blue-200/70"
+                  >
+                    <span>7 Hari Terakhir</span>
+                    <ChevronDown size={12} />
+                  </button>
+                </div>
+
+                {/* SVG Area Line Chart Glowing */}
+                <div className="pt-4 pb-2">
+                  <div className="h-44 w-full relative">
+                    <svg className="w-full h-full overflow-visible" viewBox="0 0 500 150" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M 0,90 Q 70,110 140,50 T 280,80 T 420,90 L 500,30 L 500,150 L 0,150 Z"
+                        fill="url(#chartGradient)"
+                      />
+                      <path
+                        d="M 0,90 Q 70,110 140,50 T 280,80 T 420,90 L 500,30"
+                        fill="none"
+                        stroke="#06b6d4"
+                        strokeWidth="3"
+                        className="drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+                      />
+                      <circle cx="0" cy="90" r="4" fill="#06b6d4" />
+                      <circle cx="83" cy="105" r="4" fill="#06b6d4" />
+                      <circle cx="166" cy="50" r="4" fill="#06b6d4" />
+                      <circle cx="250" cy="85" r="4" fill="#06b6d4" />
+                      <circle cx="333" cy="70" r="4" fill="#06b6d4" />
+                      <circle cx="416" cy="90" r="4" fill="#06b6d4" />
+                      <circle cx="500" cy="30" r="5" fill="#38bdf8" className="animate-ping" />
+                      <circle cx="500" cy="30" r="4" fill="#ffffff" />
+                    </svg>
+
+                    <div className="flex justify-between text-[10px] text-blue-300/50 pt-3">
+                      <span>26 Sep</span>
+                      <span>27 Sep</span>
+                      <span>28 Sep</span>
+                      <span>29 Sep</span>
+                      <span>30 Sep</span>
+                      <span>1 Okt</span>
+                      <span>2 Okt</span>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+
+              </div>
+
             </div>
+
+            {/* KOLOM KANAN: TABEL AKTIVITAS TERBARU (5 Kolom) */}
+            <div className="lg:col-span-5 bg-slate-900/60 border border-blue-500/20 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4 flex flex-col justify-between">
+              
+              <div>
+                <div className="flex items-center justify-between border-b border-blue-500/15 pb-3">
+                  <h2 className="text-sm font-bold text-white">Aktivitas Terbaru</h2>
+                </div>
+
+                {/* Header Tabel */}
+                <div className="grid grid-cols-12 text-[10px] font-semibold text-blue-300/50 pt-3 pb-2 border-b border-blue-500/10">
+                  <span className="col-span-3">Waktu</span>
+                  <span className="col-span-6">Aktivitas</span>
+                  <span className="col-span-3 text-right">Pengguna</span>
+                </div>
+
+                {/* Rows Aktivitas */}
+                <div className="space-y-3 pt-2 text-xs">
+                  
+                  {/* Row 1 */}
+                  <div className="grid grid-cols-12 items-center text-[11px] py-1 border-b border-blue-500/10">
+                    <div className="col-span-3 text-[10px] text-blue-300/60">
+                      <div>02 Okt 2026</div>
+                      <div>10:45</div>
+                    </div>
+                  </div>
+
+                  {/* Row 2 */}
+                  <div className="grid grid-cols-12 items-center text-[11px] py-1 border-b border-blue-500/10">
+                    <div className="col-span-3 text-[10px] text-blue-300/60">
+                      <div>02 Okt 2026</div>
+                      <div>09:32</div>
+                    </div>
+                    <div className="col-span-6 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
+                        <Plus size={13} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white text-[11px]">Menambahkan mata kuliah</p>
+                        <p className="text-[9px] text-blue-300/50">Sistem Informasi</p>
+                      </div>
+                    </div>
+                    <div className="col-span-3 text-right">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-blue-200">
+                        <UserCheck size={11} className="text-cyan-400" /> Dosen
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Row 3 */}
+                  <div className="grid grid-cols-12 items-center text-[11px] py-1 border-b border-blue-500/10">
+                    <div className="col-span-3 text-[10px] text-blue-300/60">
+                      <div>02 Okt 2026</div>
+                      <div>08:17</div>
+                    </div>
+                    <div className="col-span-6 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-blue-500/20 text-cyan-400 shrink-0">
+                        <Users size={13} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white text-[11px]">Mengubah data user</p>
+                        <p className="text-[9px] text-blue-300/50">Dosen - Rifa</p>
+                      </div>
+                    </div>
+                    <div className="col-span-3 text-right">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-blue-200">
+                        <UserCheck size={11} className="text-cyan-400" /> Tendik
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Row 4 */}
+                  <div className="grid grid-cols-12 items-center text-[11px] py-1 border-b border-blue-500/10">
+                    <div className="col-span-3 text-[10px] text-blue-300/60">
+                      <div>01 Okt 2026</div>
+                      <div>16:20</div>
+                    </div>
+                    <div className="col-span-6 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-300 shrink-0">
+                        <Upload size={13} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white text-[11px]">Mengupload dokumen</p>
+                        <p className="text-[9px] text-blue-300/50">RPS - Basis Data</p>
+                      </div>
+                    </div>
+                    <div className="col-span-3 text-right">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-blue-200">
+                        <UserCheck size={11} className="text-cyan-400" /> Dosen
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Row 5 */}
+                  <div className="grid grid-cols-12 items-center text-[11px] py-1">
+                    <div className="col-span-3 text-[10px] text-blue-300/60">
+                      <div>01 Okt 2026</div>
+                      <div>14:05</div>
+                    </div>
+                    <div className="col-span-6 flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 shrink-0">
+                        <UserMinus size={13} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white text-[11px]">Menghapus user</p>
+                        <p className="text-[9px] text-blue-300/50">Mahasiswa - Andi Pratama</p>
+                      </div>
+                    </div>
+                    <div className="col-span-3 text-right">
+                      <span className="inline-flex items-center gap-1 text-[10px] text-blue-200">
+                        <UserCheck size={11} className="text-cyan-400" /> Tendik
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
           </div>
-        </div>
-      </main>
+
+        </main>
+
+      </div>
+
     </div>
   );
 }
