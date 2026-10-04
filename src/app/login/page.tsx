@@ -19,7 +19,7 @@ export default function LoginPage() {
       router.push('/student/courses');
     } else if (email.endsWith('@dosen.uns.ac.id')) {
       router.push('/dosen/dashboard');
-    } else if (email.endsWith('@tendik.uns.ac.id')) {
+    } else if (email.endsWith('@admin.uns.ac.id')) {
       router.push('/admin/dashboard');
     } else {
       setError('Format email tidak valid.');
@@ -27,11 +27,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-x-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 relative overflow-x-hidden bg-[#070C1E] text-white">
       {/* Background Glow - Responsif ukurannya di mobile */}
-      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div className="w-full max-w-md glass-card p-6 sm:p-8 rounded-3xl border border-white/15 relative z-10 shadow-2xl mx-auto">
+      <div className="w-full max-w-md glass-card p-5 sm:p-8 rounded-3xl border border-white/15 relative z-10 shadow-2xl mx-auto backdrop-blur-xl bg-slate-900/60">
+        
         {/* Header Logo */}
         <div className="text-center space-y-3 mb-6 sm:mb-8">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/30">
@@ -43,6 +44,7 @@ export default function LoginPage() {
 
         {/* Form Login */}
         <form className="space-y-4 sm:space-y-5" onSubmit={handleLogin}>
+          
           <div className="space-y-1.5">
             <label htmlFor="email" className="text-xs font-medium text-slate-300">Email</label>
             <div className="relative">
@@ -53,8 +55,8 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="••••••••" 
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 transition"
+                placeholder="nama@student.uns.ac.id" 
+                className="w-full glass-input bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
           </div>
@@ -68,14 +70,14 @@ export default function LoginPage() {
                 type="password" 
                 required
                 placeholder="••••••••" 
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 transition"
+                className="w-full glass-input bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
           </div>
 
           <div className="flex items-center justify-between text-xs text-slate-300">
             <label className="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" className="rounded bg-slate-900 border-white/20 text-cyan-500 focus:ring-0" />
+              <input type="checkbox" className="rounded bg-slate-900 border-white/20 text-cyan-500 focus:ring-0 cursor-pointer" />
               <span>Ingat saya</span>
             </label>
             <button 
@@ -96,7 +98,7 @@ export default function LoginPage() {
           {/* Tombol Login */}
           <button 
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition flex items-center justify-center space-x-2 cursor-pointer mt-2"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-xs sm:text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition flex items-center justify-center space-x-2 cursor-pointer mt-2"
           >
             <span>Login</span>
             <ArrowRight className="w-4 h-4" />
@@ -110,6 +112,7 @@ export default function LoginPage() {
             Daftar sekarang
           </Link>
         </div>
+
       </div>
     </div>
   );

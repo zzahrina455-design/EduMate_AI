@@ -19,6 +19,8 @@ import {
   Landmark, 
   FileText,
   LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 
 interface Courses {
@@ -32,6 +34,7 @@ interface Courses {
 
 export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Data 8 Mata Kuliah sesuai Gambar Mockup
   const coursesData: Courses[] = [
@@ -172,22 +175,31 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col">
+    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col overflow-x-hidden">
       
       {/* ================= 1. TOP NAVIGATION BAR HORIZONTAL ================= */}
-      <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between sticky top-0 z-50">
+      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between sticky top-0 z-50">
         
-        {/* Brand Logo */}
+        {/* Brand Logo & Hamburger */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
-            <GraduationCap size={22} />
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-xl bg-slate-900/80 border border-blue-500/20 text-blue-200 hover:text-white transition-all"
+            aria-label="Toggle Mobile Menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
+            <GraduationCap size={20} />
           </div>
-          <span className="text-base md:text-lg font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate">
             EduMate AI
           </span>
         </div>
 
-        {/* Menu Navigasi Tengah */}
+        {/* Menu Navigasi Tengah (Desktop) */}
         <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 p-1 rounded-2xl border border-blue-500/15">
           {/* Menu Aktif: Mata Kuliah */}
           <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
@@ -216,7 +228,7 @@ export default function CoursesPage() {
         {/* Akses Cepat Kanan (Profil User) */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all">
-            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
               ZZ
             </div>
             <div className="text-left hidden lg:block">
@@ -227,17 +239,53 @@ export default function CoursesPage() {
         </div>
       </header>
 
+      {/* ================= MOBILE DRAWER MENU ================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden bg-black/70 backdrop-blur-md pt-20 px-4">
+          <div className="w-full h-fit bg-slate-900 border border-blue-500/30 p-5 rounded-2xl flex flex-col space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
+              <Link
+                href="/student/courses"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30 font-semibold"
+              >
+                <BookOpen size={16} />
+                <span>Mata Kuliah</span>
+              </Link>
+              <Link
+                href="/student/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <User size={16} />
+                <span>Profil</span>
+              </Link>
+            </nav>
+            <div className="pt-2 border-t border-blue-500/20">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-xs font-medium transition-all"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================= 2. KONTEN UTAMA HALAMAN ================= */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
         
         {/* Banner Header Section */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-blue-900/50 border border-blue-500/20 p-6 md:p-8 overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 z-10 text-left max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-cyan-300 text-xs font-medium">
+        <div className="relative rounded-3xl bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-blue-900/50 border border-blue-500/20 p-5 sm:p-8 overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 z-10 text-center md:text-left max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-cyan-300 text-xs font-medium mx-auto md:mx-0">
               <GraduationCap size={14} />
               <span>EduMate Academic Space</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">
               Mata Kuliah
             </h1>
             <p className="text-xs md:text-sm text-blue-200/70 leading-relaxed">
@@ -246,7 +294,7 @@ export default function CoursesPage() {
           </div>
 
           {/* Graphic Banner Kanan */}
-          <div className="relative w-48 h-28 hidden md:flex items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.25)]">
+          <div className="relative w-48 h-28 hidden md:flex items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.25)] shrink-0">
             <BookOpen size={48} className="text-cyan-300 drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
             <GraduationCap size={24} className="absolute top-3 right-4 text-blue-300" />
           </div>
@@ -261,12 +309,12 @@ export default function CoursesPage() {
               placeholder="Cari mata kuliah..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl pl-11 pr-12 py-3 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400/60 backdrop-blur-md transition-all shadow-inner"
+              className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl pl-11 pr-4 py-3 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400/60 backdrop-blur-md transition-all shadow-inner"
             />
           </div>
         </div>
 
-        {/* Grid 8 Kartu Mata Kuliah */}
+        {/* Grid Kartu Mata Kuliah */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           {filteredCourses.map((courses) => (
             <div
@@ -279,6 +327,7 @@ export default function CoursesPage() {
                   {renderCourseIllustration(courses.type)}
                   <button
                     type="button"
+                    aria-label="Opsi lainnya"
                     className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/60 hover:bg-slate-900 text-blue-300 hover:text-white backdrop-blur-md transition-all"
                   >
                     <MoreHorizontal size={14} />
@@ -291,18 +340,18 @@ export default function CoursesPage() {
                 </h3>
                 <p className="text-[11px] text-blue-200/60 line-clamp-1 flex items-center gap-1 mb-4">
                   <User size={11} className="text-blue-400 shrink-0" />
-                  {courses.lecturer}
+                  <span className="truncate">{courses.lecturer}</span>
                 </p>
               </div>
 
               {/* Progres & Jumlah Materi */}
               <div className="space-y-2 mt-2 pt-3 border-t border-blue-500/15">
                 <div className="flex items-center justify-between text-[11px] text-blue-200/70 font-medium">
-                  <span className="flex items-center gap-1">
-                    <FileText size={12} className="text-cyan-400" />
-                    {courses.materialsCount} Materi
+                  <span className="flex items-center gap-1 truncate">
+                    <FileText size={12} className="text-cyan-400 shrink-0" />
+                    <span>{courses.materialsCount} Materi</span>
                   </span>
-                  <span className="text-cyan-300 font-bold">{courses.progress}%</span>
+                  <span className="text-cyan-300 font-bold shrink-0">{courses.progress}%</span>
                 </div>
 
                 {/* Bar Progres Glowing */}

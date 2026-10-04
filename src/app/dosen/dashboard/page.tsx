@@ -25,7 +25,8 @@ import {
   CheckCircle2,
   Trash2,
   FileCheck,
-  Plus
+  Plus,
+  Menu
 } from 'lucide-react';
 
 interface Courses {
@@ -51,10 +52,11 @@ interface UploadHistoryItem {
 export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // State Modal & Toast
+  // State Modal, Toast & Mobile Menu
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // State Form Upload Baru
@@ -248,37 +250,44 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative">
+    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative overflow-x-hidden">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 px-4 py-2.5 rounded-xl backdrop-blur-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300 text-xs font-semibold">
-          <CheckCircle2 size={16} className="text-emerald-400" />
-          <span>{toastMessage}</span>
+        <div className="fixed top-20 right-4 sm:right-6 z-50 bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 px-4 py-2.5 rounded-xl backdrop-blur-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300 text-xs font-semibold">
+          <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+          <span className="truncate">{toastMessage}</span>
         </div>
       )}
 
       {/* ================= 1. TOP NAVIGATION BAR HORIZONTAL ================= */}
-      <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
+      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
         
-        {/* Brand Logo */}
+        {/* Left: Hamburger & Brand Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
-            <GraduationCap size={22} />
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-xl bg-slate-900/80 border border-blue-500/20 text-blue-200 hover:text-white transition-all"
+            aria-label="Toggle Mobile Menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
+            <GraduationCap size={20} />
           </div>
-          <span className="text-base md:text-lg font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate">
             EduMate AI
           </span>
         </div>
 
-        {/* Menu Navigasi Tengah Lengkap */}
+        {/* Menu Navigasi Tengah (Desktop) */}
         <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 p-1 rounded-2xl border border-blue-500/15">
-          {/* Menu Aktif: Mata Kuliah */}
           <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
             <BookOpen size={14} />
             <span>Mata Kuliah</span>
           </div>
-          {/* Menu Profil */}
           <Link
             href="/dosen/profile"
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
@@ -286,8 +295,6 @@ export default function CoursesPage() {
             <User size={14} />
             <span>Profil</span>
           </Link>
-
-          {/* Tombol Keluar Navigasi */}
           <Link
             href="/login"
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
@@ -300,7 +307,7 @@ export default function CoursesPage() {
         {/* Akses Cepat Kanan (Profil User) */}
         <div className="flex items-center gap-3">
           <Link href="/dosen/profile" className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all">
-            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
               DR
             </div>
             <div className="text-left hidden lg:block">
@@ -311,17 +318,63 @@ export default function CoursesPage() {
         </div>
       </header>
 
+      {/* ================= MOBILE DRAWER MENU ================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden bg-black/70 backdrop-blur-md pt-20 px-4">
+          <div className="w-full h-fit bg-slate-900 border border-blue-500/30 p-5 rounded-2xl flex flex-col space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-blue-500/20">
+              <span className="text-xs font-bold text-cyan-300">Menu Navigasi Dosen</span>
+              <button 
+                type="button" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-400 hover:text-white"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
+              <Link 
+                href="/dosen/courses" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold"
+              >
+                <BookOpen size={16} className="text-white" />
+                <span>Mata Kuliah</span>
+              </Link>
+              <Link 
+                href="/dosen/profile" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <User size={16} className="text-blue-300/60" />
+                <span>Profil</span>
+              </Link>
+            </nav>
+            <div className="pt-2 border-t border-blue-500/20">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================= 2. KONTEN UTAMA HALAMAN ================= */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
         
         {/* Banner Header Section */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-blue-900/50 border border-blue-500/20 p-6 md:p-8 overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-3 z-10 text-left max-w-xl">
+        <div className="relative rounded-3xl bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-blue-900/50 border border-blue-500/20 p-5 sm:p-6 md:p-8 overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-3 z-10 text-left max-w-xl w-full">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-cyan-300 text-xs font-medium">
               <GraduationCap size={14} />
               <span>EduMate Academic Space</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">
               Mata Kuliah
             </h1>
             <p className="text-xs md:text-sm text-blue-200/70 leading-relaxed">
@@ -333,7 +386,7 @@ export default function CoursesPage() {
               <button
                 type="button"
                 onClick={() => setIsCreateModalOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30 cursor-pointer"
               >
                 <Plus size={16} />
                 <span>Buat Kelas Baru</span>
@@ -342,7 +395,7 @@ export default function CoursesPage() {
           </div>
 
           {/* Graphic Banner Kanan */}
-          <div className="relative w-48 h-28 hidden md:flex items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.25)]">
+          <div className="relative w-48 h-28 hidden md:flex items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.25)] shrink-0">
             <BookOpen size={48} className="text-cyan-300 drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
             <GraduationCap size={24} className="absolute top-3 right-4 text-blue-300" />
           </div>
@@ -357,7 +410,7 @@ export default function CoursesPage() {
               placeholder="Cari mata kuliah atau nama dosen..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl pl-11 pr-12 py-3 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400/60 backdrop-blur-md transition-all shadow-inner"
+              className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl pl-11 pr-4 py-3 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400/60 backdrop-blur-md transition-all shadow-inner"
             />
           </div>
         </div>
@@ -376,7 +429,7 @@ export default function CoursesPage() {
                   <button
                     type="button"
                     aria-label="Opsi tambahan"
-                    className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/60 hover:bg-slate-900 text-blue-300 hover:text-white backdrop-blur-md transition-all"
+                    className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/60 hover:bg-slate-900 text-blue-300 hover:text-white backdrop-blur-md transition-all cursor-pointer"
                   >
                     <MoreHorizontal size={14} />
                   </button>
@@ -428,19 +481,19 @@ export default function CoursesPage() {
 
       {/* ================= MODAL BUAT KELAS BARU ================= */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-slate-900 border border-blue-500/30 rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-slate-900 border border-blue-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             
             <div className="flex items-center justify-between border-b border-blue-500/20 pb-3">
               <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Plus size={18} className="text-cyan-400" />
-                <span>Buat Kelas Mata Kuliah Baru</span>
+                <Plus size={18} className="text-cyan-400 shrink-0" />
+                <span className="truncate">Buat Kelas Mata Kuliah Baru</span>
               </div>
               <button
                 type="button"
                 aria-label="Tutup modal buat kelas"
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-blue-300/60 hover:text-white transition-colors"
+                className="text-blue-300/60 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -460,7 +513,7 @@ export default function CoursesPage() {
                   placeholder="Contoh: Arsitektur Perangkat Lunak..."
                   value={newCourseTitle}
                   onChange={(e) => setNewCourseTitle(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"
+                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all text-xs"
                 />
               </div>
 
@@ -476,7 +529,7 @@ export default function CoursesPage() {
                   placeholder="Nama Dosen Pengampu..."
                   value={newCourseDosen}
                   onChange={(e) => setNewCourseDosen(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"
+                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all text-xs"
                 />
               </div>
 
@@ -489,7 +542,7 @@ export default function CoursesPage() {
                   id="createCourseType"
                   value={newCourseType}
                   onChange={(e) => setNewCourseType(e.target.value as Courses['type'])}
-                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400 transition-all [color-scheme:dark]"
+                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400 transition-all [color-scheme:dark] text-xs"
                 >
                   <option value="web">Web & Software Engineering</option>
                   <option value="database">Database & Data Science</option>
@@ -506,13 +559,13 @@ export default function CoursesPage() {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-xl font-medium text-blue-200/70 hover:text-white transition-all"
+                  className="px-4 py-2 rounded-xl font-medium text-blue-200/70 hover:text-white transition-all cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold transition-all shadow-md shadow-blue-600/30 flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold transition-all shadow-md shadow-blue-600/30 flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus size={15} />
                   <span>Publikasikan Kelas</span>
@@ -527,19 +580,19 @@ export default function CoursesPage() {
 
       {/* ================= MODAL UPLOAD MODUL & RPS ================= */}
       {isUploadModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-slate-900 border border-blue-500/30 rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-slate-900 border border-blue-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             
             <div className="flex items-center justify-between border-b border-blue-500/20 pb-3">
               <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Upload size={18} className="text-cyan-400" />
-                <span>Upload Modul atau RPS Pembelajaran</span>
+                <Upload size={18} className="text-cyan-400 shrink-0" />
+                <span className="truncate">Upload Modul atau RPS Pembelajaran</span>
               </div>
               <button
                 type="button"
                 aria-label="Tutup modal upload"
                 onClick={() => setIsUploadModalOpen(false)}
-                className="text-blue-300/60 hover:text-white transition-colors"
+                className="text-blue-300/60 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -556,7 +609,7 @@ export default function CoursesPage() {
                   id="selectCourse"
                   value={selectedCourse}
                   onChange={(e) => setSelectedCourse(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400 transition-all [color-scheme:dark]"
+                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400 transition-all [color-scheme:dark] text-xs"
                 >
                   {coursesList.map((c) => (
                     <option key={c.id} value={c.title}>{c.title}</option>
@@ -573,7 +626,7 @@ export default function CoursesPage() {
                   <button
                     type="button"
                     onClick={() => setDocType('Modul')}
-                    className={`p-3 rounded-xl border text-center transition-all ${
+                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                       docType === 'Modul'
                         ? 'bg-blue-600/30 border-cyan-400 text-white font-bold'
                         : 'bg-slate-950 border-blue-500/20 text-blue-300/70 hover:bg-slate-800'
@@ -584,7 +637,7 @@ export default function CoursesPage() {
                   <button
                     type="button"
                     onClick={() => setDocType('RPS')}
-                    className={`p-3 rounded-xl border text-center transition-all ${
+                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                       docType === 'RPS'
                         ? 'bg-blue-600/30 border-cyan-400 text-white font-bold'
                         : 'bg-slate-950 border-blue-500/20 text-blue-300/70 hover:bg-slate-800'
@@ -604,10 +657,10 @@ export default function CoursesPage() {
                   id="uploadTitle"
                   type="text"
                   required
-                  placeholder="Contoh: Modul Pertemuan 4 - Critical Path Method..."
+                  placeholder="Contoh: Modul Pertemuan 4..."
                   value={uploadTitle}
                   onChange={(e) => setUploadTitle(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"
+                  className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all text-xs"
                 />
               </div>
 
@@ -629,8 +682,8 @@ export default function CoursesPage() {
                     }}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
-                  <Upload size={24} className="mx-auto text-cyan-400 mb-1" />
-                  <p className="text-xs text-white font-medium">
+                  <Upload size={24} className="mx-auto text-cyan-400 mb-1 shrink-0" />
+                  <p className="text-xs text-white font-medium truncate max-w-full px-2">
                     {selectedFileName || 'Klik atau seret file PDF / Modul ke sini'}
                   </p>
                   <p className="text-[10px] text-blue-300/50 mt-1">Maksimal ukuran berkas: 20MB</p>
@@ -641,13 +694,13 @@ export default function CoursesPage() {
                 <button
                   type="button"
                   onClick={() => setIsUploadModalOpen(false)}
-                  className="px-4 py-2 rounded-xl font-medium text-blue-200/70 hover:text-white transition-all"
+                  className="px-4 py-2 rounded-xl font-medium text-blue-200/70 hover:text-white transition-all cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold transition-all shadow-md shadow-blue-600/30"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold transition-all shadow-md shadow-blue-600/30 cursor-pointer"
                 >
                   Unggah Berkas
                 </button>
@@ -661,19 +714,19 @@ export default function CoursesPage() {
 
       {/* ================= MODAL RIWAYAT UPLOAD ================= */}
       {isHistoryModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-slate-900 border border-blue-500/30 rounded-3xl p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl bg-slate-900 border border-blue-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
             
             <div className="flex items-center justify-between border-b border-blue-500/20 pb-3">
               <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <History size={18} className="text-cyan-400" />
-                <span>Riwayat Berkas Diunggah</span>
+                <History size={18} className="text-cyan-400 shrink-0" />
+                <span className="truncate">Riwayat Berkas Diunggah</span>
               </div>
               <button
                 type="button"
                 aria-label="Tutup modal riwayat"
                 onClick={() => setIsHistoryModalOpen(false)}
-                className="text-blue-300/60 hover:text-white transition-colors"
+                className="text-blue-300/60 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -695,16 +748,16 @@ export default function CoursesPage() {
                         <FileCheck size={18} />
                       </div>
                       <div className="space-y-0.5 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold ${
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold shrink-0 ${
                             item.docType === 'RPS' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                           }`}>
                             {item.docType}
                           </span>
-                          <span className="text-[10px] text-blue-300/60">{item.courseTitle}</span>
+                          <span className="text-[10px] text-blue-300/60 truncate">{item.courseTitle}</span>
                         </div>
-                        <h4 className="font-bold text-white truncate">{item.title}</h4>
-                        <p className="text-[10px] text-blue-300/50">
+                        <h4 className="font-bold text-white truncate text-xs">{item.title}</h4>
+                        <p className="text-[10px] text-blue-300/50 truncate">
                           {item.fileName} • {item.fileSize} • {item.date}
                         </p>
                       </div>
@@ -717,7 +770,7 @@ export default function CoursesPage() {
                       <button
                         type="button"
                         onClick={() => handleDeleteHistory(item.id)}
-                        className="p-1.5 text-slate-500 hover:text-red-400 transition-colors"
+                        className="p-1.5 text-slate-500 hover:text-red-400 transition-colors cursor-pointer"
                         title="Hapus"
                       >
                         <Trash2 size={15} />
@@ -732,7 +785,7 @@ export default function CoursesPage() {
               <button
                 type="button"
                 onClick={() => setIsHistoryModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-medium hover:bg-slate-700 transition-all"
+                className="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-medium hover:bg-slate-700 transition-all cursor-pointer"
               >
                 Tutup
               </button>

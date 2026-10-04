@@ -15,7 +15,8 @@ import {
   Sparkles, 
   X,
   Plus,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Menu
 } from 'lucide-react';
 
 interface Message {
@@ -37,6 +38,7 @@ export default function ChatAIPage() {
   const [attachedFile, setAttachedFile] = useState<AttachedFile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAttachMenu, setShowAttachMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Ref untuk pemicu input file tersembunyi
   const documentInputRef = useRef<HTMLInputElement>(null);
@@ -96,10 +98,10 @@ export default function ChatAIPage() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#070C1E] text-white overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-[#070C1E] text-white overflow-hidden font-sans relative">
       
-      {/* ================= 1. SIDEBAR NAVIGASI KIRI ================= */}
-      <aside className="w-56 bg-slate-900/60 backdrop-blur-2xl border-r border-blue-500/15 flex flex-col justify-between p-4 shrink-0">
+      {/* ================= 1. SIDEBAR NAVIGASI KIRI (DESKTOP) ================= */}
+      <aside className="w-56 bg-slate-900/60 backdrop-blur-2xl border-r border-blue-500/15 hidden lg:flex flex-col justify-between p-4 shrink-0">
         <div>
           {/* Logo EduMate AI */}
           <div className="flex items-center gap-3 px-2 py-3 mb-6">
@@ -148,11 +150,99 @@ export default function ChatAIPage() {
         </div>
       </aside>
 
+      {/* ================= MOBILE DRAWER MENU ================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/70 backdrop-blur-md pt-20 px-4">
+          <div className="w-full h-fit bg-slate-900 border border-blue-500/30 p-5 rounded-2xl flex flex-col space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-blue-500/20">
+              <span className="text-xs font-bold text-cyan-300">Menu Navigasi</span>
+              <button 
+                type="button" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-400 hover:text-white"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
+              <Link 
+                href="/student/courses/Manpro" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <LayoutDashboard size={16} className="text-blue-300/60" />
+                <span>Mata Kuliah</span>
+              </Link>
+              <Link 
+                href="/student/chat/Manpro" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold"
+              >
+                <MessageSquareText size={16} className="text-white" />
+                <span>Tanya AI</span>
+              </Link>
+              <Link 
+                href="/student/history/Manpro" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <History size={16} className="text-blue-300/60" />
+                <span>Riwayat</span>
+              </Link>
+            </nav>
+            <div className="pt-2 border-t border-blue-500/20">
+              <Link
+                href="/student/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================= 2. AREA UTAMA (HEADER + CHAT) ================= */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         
         {/* Header Atas */}
-        <header className="h-14 px-6 border-b border-blue-500/15 bg-slate-900/30 backdrop-blur-md flex items-center justify-between shrink-0"></header>
+        <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between shrink-0 z-40">
+          <div className="flex items-center gap-3">
+            {/* Tombol Hamburger Mobile */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl bg-slate-900/80 border border-blue-500/20 text-blue-200 hover:text-white transition-all"
+              aria-label="Toggle Mobile Menu"
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+
+            <div className="flex items-center gap-2 lg:hidden">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
+                <GraduationCap size={18} />
+              </div>
+              <span className="text-sm font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                EduMate AI
+              </span>
+            </div>
+          </div>
+
+          {/* Profil User Kanan */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl">
+              <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
+                ZZ
+              </div>
+              <div className="text-left hidden sm:block">
+                <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
+                <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
+              </div>
+            </div>
+          </div>
+        </header>
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-hidden p-4 md:p-6 flex flex-col min-h-0">
@@ -160,7 +250,7 @@ export default function ChatAIPage() {
             
             {/* Title */}
             <div className="mb-3 shrink-0">
-              <h1 className="text-xl font-bold text-white">
+              <h1 className="text-lg md:text-xl font-bold text-white">
                 Tanya EduMate AI
               </h1>
               <p className="text-xs text-blue-200/70 mt-0.5">
@@ -246,7 +336,7 @@ export default function ChatAIPage() {
 
                 {isLoading && (
                   <div className="flex gap-2.5 max-w-md mr-auto">
-                    <div className="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 flex items-center justify-center animate-pulse">
+                    <div className="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 flex items-center justify-center animate-pulse shrink-0">
                       <Bot size={14} />
                     </div>
                     <div className="bg-slate-800/90 border border-blue-500/20 rounded-2xl p-3 text-xs text-blue-300/80 rounded-tl-none flex items-center gap-2">
@@ -264,21 +354,21 @@ export default function ChatAIPage() {
               {/* Preview File Terlampir (Sebelum dikirim) */}
               {attachedFile && (
                 <div className="px-4 py-2 bg-blue-950/80 border-t border-blue-500/20 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs text-cyan-300">
+                  <div className="flex items-center gap-2 text-xs text-cyan-300 min-w-0 pr-2">
                     {attachedFile.type === 'document' ? (
-                      <FileText size={15} className="text-cyan-400" />
+                      <FileText size={15} className="text-cyan-400 shrink-0" />
                     ) : (
-                      <ImageIcon size={15} className="text-cyan-400" />
+                      <ImageIcon size={15} className="text-cyan-400 shrink-0" />
                     )}
                     <span className="truncate max-w-xs font-medium">{attachedFile.file.name}</span>
-                    <span className="text-[10px] text-blue-300/50">
+                    <span className="text-[10px] text-blue-300/50 shrink-0">
                       ({(attachedFile.file.size / 1024).toFixed(1)} KB)
                     </span>
                   </div>
                   <button 
                     type="button"
                     onClick={() => setAttachedFile(null)} 
-                    className="text-blue-300/60 hover:text-red-400 transition-colors p-1"
+                    className="text-blue-300/60 hover:text-red-400 transition-colors p-1 shrink-0"
                   >
                     <X size={14} />
                   </button>
@@ -298,7 +388,7 @@ export default function ChatAIPage() {
                       onClick={() => documentInputRef.current?.click()}
                       className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-200 hover:text-white hover:bg-blue-600/30 rounded-lg transition-all text-left"
                     >
-                      <FileText size={15} className="text-cyan-400" />
+                      <FileText size={15} className="text-cyan-400 shrink-0" />
                       <div>
                         <span className="block font-medium">Unggah Dokumen</span>
                         <span className="block text-[9px] text-blue-300/50">PDF, DOC, PPT, TXT</span>
@@ -311,7 +401,7 @@ export default function ChatAIPage() {
                       onClick={() => imageInputRef.current?.click()}
                       className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-200 hover:text-white hover:bg-blue-600/30 rounded-lg transition-all text-left"
                     >
-                      <ImageIcon size={15} className="text-cyan-400" />
+                      <ImageIcon size={15} className="text-cyan-400 shrink-0" />
                       <div>
                         <span className="block font-medium">Unggah Gambar</span>
                         <span className="block text-[9px] text-blue-300/50">PNG, JPG, JPEG, WEBP</span>
@@ -365,7 +455,7 @@ export default function ChatAIPage() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Tanya EduMate AI..."
-                    className="flex-1 bg-transparent px-2 py-1 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none"
+                    className="flex-1 bg-transparent px-2 py-1 text-xs md:text-sm text-white placeholder-blue-300/40 focus:outline-none min-w-0"
                   />
 
                   {/* Tombol Send */}

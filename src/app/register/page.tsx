@@ -27,11 +27,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-x-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 relative overflow-x-hidden bg-[#070C1E] text-white">
       {/* Background Glow - Responsif ukurannya di mobile dan desktop */}
-      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div className="w-full max-w-md glass-card p-6 sm:p-8 rounded-3xl border border-white/15 relative z-10 shadow-2xl mx-auto">
+      <div className="w-full max-w-md glass-card p-5 sm:p-8 rounded-3xl border border-white/15 relative z-10 shadow-2xl mx-auto backdrop-blur-xl bg-slate-900/60">
+        
         {/* Header Logo */}
         <div className="text-center space-y-3 mb-6">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/30">
@@ -43,6 +44,7 @@ export default function RegisterPage() {
 
         {/* Form Register */}
         <form className="space-y-4" onSubmit={handleRegister}>
+          
           <div className="space-y-1.5">
             <label htmlFor="fullname" className="text-xs font-medium text-slate-300">Nama Lengkap</label>
             <div className="relative">
@@ -52,7 +54,7 @@ export default function RegisterPage() {
                 type="text" 
                 required
                 placeholder="Masukkan nama lengkap" 
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 transition"
+                className="w-full glass-input bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
           </div>
@@ -68,7 +70,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan email kalian" 
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 transition"
+                className="w-full glass-input bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
           </div>
@@ -82,7 +84,7 @@ export default function RegisterPage() {
                 type="password" 
                 required
                 placeholder="Buat password" 
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 transition"
+                className="w-full glass-input bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
           </div>
@@ -96,7 +98,7 @@ export default function RegisterPage() {
           {/* Tombol Daftar */}
           <button 
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition flex items-center justify-center space-x-2 mt-2 cursor-pointer"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-xs sm:text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition flex items-center justify-center space-x-2 mt-2 cursor-pointer"
           >
             <span>Daftar</span>
             <ArrowRight className="w-4 h-4" />
@@ -110,6 +112,7 @@ export default function RegisterPage() {
             Login sekarang
           </Link>
         </div>
+
       </div>
     </div>
   );

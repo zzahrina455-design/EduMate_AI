@@ -16,7 +16,8 @@ import {
   StickyNote, 
   X, 
   CheckCircle2, 
-  Trash2
+  Trash2,
+  Menu
 } from 'lucide-react';
 
 interface NoteItem {
@@ -28,16 +29,17 @@ interface NoteItem {
 }
 
 export default function CourseDetailPage() {
-  // State untuk Modal & Input Catatan Baru
+  // State untuk Modal, Input Catatan Baru, & Mobile Menu
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDate, setNewDate] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // State Daftar Catatan / Tugas (Real-time)
   const [notes, setNotes] = useState<NoteItem[]>([
-    { id: '1', title: 'Catatan Pertemuan 3 - React Hooks', date: '18 Sep 2026', time: '10:24', completed: true },
-    { id: '2', title: 'Ringkasan Materi Flexbox & Grid CSS', date: '22 Sep 2026', time: '15:37', completed: false },
-    { id: '3', title: 'Tugas 2: Integrasi REST API FastAPI', date: '25 Sep 2026', time: '23:59', completed: false }
+    { id: '1', title: 'Catatan Pertemuan 3 - Kerangka Tulisan', date: '18 Sep 2026', time: '10:24', completed: true },
+    { id: '2', title: 'Ringkasan Materi Sitasi & Daftar Pustaka', date: '22 Sep 2026', time: '15:37', completed: false },
+    { id: '3', title: 'Tugas 2: Penyusunan Rumusan Masalah', date: '25 Sep 2026', time: '23:59', completed: false }
   ]);
 
   // Helper untuk Memformat Input Date (YYYY-MM-DD) menjadi Format Indonesia (15 Okt 2026)
@@ -86,40 +88,77 @@ export default function CourseDetailPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative">
+    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative overflow-x-hidden">
       
       {/* ================= 1. TOP NAVIGATION BAR ================= */}
-      <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
+      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
-            <GraduationCap size={22} />
+          {/* Tombol Hamburger Mobile */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-slate-900/80 border border-blue-500/20 text-blue-200 hover:text-white transition-all"
+            aria-label="Toggle Mobile Menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
+            <GraduationCap size={20} />
           </div>
-          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate">
             EduMate AI
           </span>
         </div>
 
         {/* Akses Cepat Kanan */}
         <div className="flex items-center gap-3">
-          <button 
-            type="button" 
-            className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all text-left"
-          >
-            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40">
+          <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
               ZZ
             </div>
-            <div className="text-left hidden lg:block">
+            <div className="text-left hidden sm:block">
               <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
               <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
             </div>
-          </button>
+          </div>
         </div>
       </header>
 
-      {/* ================= 2. LAYOUT UTAMA (3 KOLOM) ================= */}
-      <div className="flex-1 flex max-w-[1600px] w-full mx-auto p-4 md:p-6 gap-5 overflow-hidden">
+      {/* ================= MOBILE DRAWER MENU ================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/70 backdrop-blur-md pt-20 px-4">
+          <div className="w-full h-fit bg-slate-900 border border-blue-500/30 p-5 rounded-2xl flex flex-col space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
+              <Link href="/student/courses" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all">
+                <LayoutDashboard size={16} className="text-blue-300/60" />
+                <span>Beranda</span>
+              </Link>
+              <Link href="/student/courses" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold">
+                <BookOpen size={16} className="text-white" />
+                <span>Penulisan Ilmiah</span>
+              </Link>
+              <Link href="/student/chat/Pi" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all">
+                <MessageSquareText size={16} className="text-blue-300/60" />
+                <span>Tanya AI</span>
+              </Link>
+              <Link href="/student/history/Pi" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all">
+                <History size={16} className="text-blue-300/60" />
+                <span>Riwayat</span>
+              </Link>
+              <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all">
+                <User size={16} className="text-blue-300/60" />
+                <span>Profil</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
+
+      {/* ================= 2. LAYOUT UTAMA (RESPONSIF) ================= */}
+      <div className="flex-1 flex flex-col lg:flex-row max-w-[1600px] w-full mx-auto p-4 sm:p-6 gap-5 overflow-hidden">
         
-        {/* KOLOM 1: SIDEBAR KIRI */}
+        {/* KOLOM 1: SIDEBAR KIRI (DESKTOP) */}
         <aside className="w-52 hidden lg:flex flex-col justify-between shrink-0 space-y-4">
           <div className="space-y-1">
             <Link href="/student/courses" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
@@ -150,21 +189,21 @@ export default function CourseDetailPage() {
         </aside>
 
         {/* KOLOM 2: KONTEN UTAMA MATA KULIAH (TENGAH) */}
-        <main className="flex-1 flex flex-col min-w-0 space-y-5 overflow-y-auto pr-1">
+        <main className="flex-1 flex flex-col min-w-0 space-y-5 overflow-y-auto pr-0 lg:pr-1">
           
           {/* Header Banner Penulisan Ilmiah */}
-          <div className="relative rounded-3xl bg-slate-900/80 border border-blue-500/20 p-6 overflow-hidden shadow-2xl">
+          <div className="relative rounded-3xl bg-slate-900/80 border border-blue-500/20 p-5 sm:p-6 overflow-hidden shadow-2xl">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
-              <div className="space-y-2">
+              <div className="space-y-2 w-full min-w-0">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-2xl bg-blue-600/30 border border-cyan-400/40 text-cyan-300">
-                    <Code2 size={26} />
+                  <div className="p-2.5 rounded-2xl bg-blue-600/30 border border-cyan-400/40 text-cyan-300 shrink-0">
+                    <Code2 size={24} className="sm:w-[26px] sm:h-[26px]" />
                   </div>
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-extrabold text-white">Penulisan Ilmiah</h1>
-                    <p className="text-xs text-blue-200/70 flex items-center gap-1.5 mt-0.5">
-                      <User size={12} className="text-cyan-400" />
-                      Masbahah
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white truncate">Penulisan Ilmiah</h1>
+                    <p className="text-[11px] sm:text-xs text-blue-200/70 flex items-center gap-1.5 mt-0.5 truncate">
+                      <User size={12} className="text-cyan-400 shrink-0" />
+                      <span className="truncate">Masbahah</span>
                     </p>
                   </div>
                 </div>
@@ -173,18 +212,18 @@ export default function CourseDetailPage() {
           </div>
 
           {/* Deskripsi Mata Kuliah (Lebar Penuh) */}
-          <div className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl p-5 space-y-2">
+          <div className="w-full bg-slate-900/60 border border-blue-500/20 rounded-2xl p-4 sm:p-5 space-y-2 backdrop-blur-xl">
             <div className="flex items-center gap-2 text-xs font-bold text-white mb-1">
               <FileText size={15} className="text-cyan-400" />
               <span>Deskripsi Mata Kuliah</span>
             </div>
-            <p className="text-xs text-blue-200/80 leading-relaxed">
+            <p className="text-xs text-blue-200/80 leading-relaxed text-justify">
               Mata kuliah Penulisan Ilmiah membahas konsep, prinsip, dan teknik penyusunan karya ilmiah secara sistematis, logis, objektif, dan sesuai dengan kaidah akademik. Mahasiswa mempelajari cara menentukan topik dan rumusan masalah, mencari serta mengelola sumber referensi, menyusun kerangka tulisan, melakukan sitasi dan daftar pustaka, serta menyajikan hasil penelitian atau kajian dalam bentuk karya ilmiah. Mata kuliah ini juga melatih kemampuan mahasiswa dalam menggunakan bahasa Indonesia yang baik dan benar, berpikir kritis, menghindari plagiarisme, serta menghasilkan tulisan ilmiah yang dapat dipertanggungjawabkan secara akademik.
             </p>
           </div>
 
           {/* Daftar Materi Pembelajaran */}
-          <div className="bg-slate-900/60 border border-blue-500/20 rounded-2xl p-5 space-y-4">
+          <div className="bg-slate-900/60 border border-blue-500/20 rounded-2xl p-4 sm:p-5 space-y-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm font-bold text-white">
                 <BookOpen size={16} className="text-cyan-400" />
@@ -202,21 +241,21 @@ export default function CourseDetailPage() {
               ].map((materi) => (
                 <div
                   key={materi.id}
-                  className="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-blue-500/10 hover:border-cyan-400/40 transition-all cursor-pointer group"
+                  className="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-blue-500/10 hover:border-cyan-400/40 transition-all cursor-pointer group gap-3"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-600/20 text-cyan-400 border border-cyan-400/30">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="p-2 rounded-lg bg-blue-600/20 text-cyan-400 border border-cyan-400/30 shrink-0">
                       {materi.type === 'video' ? <Video size={16} /> : <FileText size={16} />}
                     </div>
-                    <div>
-                      <h4 className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
                         {materi.title}
                       </h4>
-                      <p className="text-[10px] text-blue-300/50 mt-0.5">{materi.desc}</p>
+                      <p className="text-[10px] text-blue-300/50 mt-0.5 truncate">{materi.desc}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 shrink-0">
                     <span className="text-[11px] text-blue-300/50 hidden sm:inline">{materi.date}</span>
                   </div>
                 </div>
@@ -226,10 +265,10 @@ export default function CourseDetailPage() {
         </main>
 
         {/* KOLOM 3: PANEL KANAN (RIWAYAT & PENCATATAN TUGAS/CATATAN) */}
-        <aside className="w-80 hidden xl:flex flex-col space-y-4 shrink-0 overflow-y-auto pr-1">
+        <aside className="w-full xl:w-80 flex flex-col space-y-4 shrink-0 overflow-y-auto pr-0 lg:pr-1">
 
           {/* Riwayat Tanya Jawab Widget */}
-          <div className="bg-slate-900/70 border border-blue-500/20 rounded-2xl p-4 space-y-3">
+          <div className="bg-slate-900/70 border border-blue-500/20 rounded-2xl p-4 space-y-3 backdrop-blur-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-bold text-white">
                 <span>Riwayat Tanya Jawab</span>
@@ -238,9 +277,9 @@ export default function CourseDetailPage() {
 
             <div className="space-y-2">
               {[
-                { title: 'Bagaimana cara menyusun Work Breakdown Structure (WBS)?', time: '23 Sep 2026 • 14:32' },
-                { title: 'Apa perbedaan metode Agile dan Waterfall?', time: '22 Sep 2026 • 16:21' },
-                { title: 'Penjelasan Critical Path Method dalam jadwal proyek', time: '20 Sep 2026 • 10:15' },
+                { title: 'Bagaimana cara menyusun rumusan masalah yang baik?', time: '23 Sep 2026 • 14:32' },
+                { title: 'Apa perbedaan sitasi langsung dan tidak langsung?', time: '22 Sep 2026 • 16:21' },
+                { title: 'Panduan menghindari plagiarisme pada karya ilmiah', time: '20 Sep 2026 • 10:15' },
               ].map((item) => (
                 <div key={item.title} className="p-2.5 rounded-xl bg-slate-950/40 border border-blue-500/10 hover:border-cyan-400/30 cursor-pointer flex items-center justify-between transition-all">
                   <div className="min-w-0 pr-2">
@@ -253,7 +292,7 @@ export default function CourseDetailPage() {
           </div>
 
           {/* Fitur Pencatatan Tugas & Catatan Interaktif */}
-          <div className="bg-slate-900/70 border border-blue-500/20 rounded-2xl p-4 space-y-3 shadow-xl">
+          <div className="bg-slate-900/70 border border-blue-500/20 rounded-2xl p-4 space-y-3 shadow-xl backdrop-blur-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-bold text-white">
                 <StickyNote size={14} className="text-cyan-400" />
@@ -303,7 +342,7 @@ export default function CourseDetailPage() {
                     </button>
 
                     <div className="min-w-0 flex-1">
-                      <p className={`text-[11px] font-medium text-white leading-snug ${note.completed ? 'line-through text-slate-400' : ''}`}>
+                      <p className={`text-[11px] font-medium text-white leading-snug truncate ${note.completed ? 'line-through text-slate-400' : ''}`}>
                         {note.title}
                       </p>
                       <span className="text-[9px] text-blue-300/50 block mt-1">
@@ -315,7 +354,7 @@ export default function CourseDetailPage() {
                     <button
                       type="button"
                       onClick={() => handleDeleteNote(note.id)}
-                      className="text-slate-500 hover:text-red-400 transition-colors p-1"
+                      className="text-slate-500 hover:text-red-400 transition-colors p-1 shrink-0"
                       title="Hapus"
                     >
                       <Trash2 size={13} />
@@ -333,18 +372,18 @@ export default function CourseDetailPage() {
       {/* ================= MODAL FORM TAMBAH CATATAN / TUGAS ================= */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-slate-900 border border-blue-500/30 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div className="w-full max-w-md bg-slate-900 border border-blue-500/30 rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-blue-500/20 pb-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <StickyNote size={18} className="text-cyan-400" />
-                <span>Tambah Catatan atau Tugas Baru</span>
+              <div className="flex items-center gap-2 text-white font-bold text-sm truncate pr-2">
+                <StickyNote size={18} className="text-cyan-400 shrink-0" />
+                <span className="truncate">Tambah Catatan atau Tugas Baru</span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-blue-300/60 hover:text-white transition-colors"
+                className="text-blue-300/60 hover:text-white transition-colors shrink-0"
               >
                 <X size={18} />
               </button>
@@ -360,7 +399,7 @@ export default function CourseDetailPage() {
                   id="noteTitle"
                   type="text"
                   required
-                  placeholder="Contoh: Kerjakan Modul 2 & Ringkasan Sprint..."
+                  placeholder="Contoh: Ringkasan Bab 1 & Daftar Pustaka..."
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"

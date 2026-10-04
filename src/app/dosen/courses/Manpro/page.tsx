@@ -7,13 +7,16 @@ import {
   LayoutDashboard, 
   BookOpen,
   History,
+  User,
   ArrowLeft, 
   Database,
   Upload, 
   FileText, 
   CloudUpload,
   Trash2,
-  CheckCircle2
+  CheckCircle2,
+  Menu,
+  X
 } from 'lucide-react';
 
 interface UploadHistoryItem {
@@ -25,12 +28,12 @@ interface UploadHistoryItem {
 }
 
 export default function CourseDetailPage() {
-
-  // State Form Upload
+  // State Form Upload, Mobile Menu, & Toast
   const [docType, setDocType] = useState<'Modul' | 'RPS'>('Modul');
   const [uploadTitle, setUploadTitle] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // State Riwayat Upload Real-time
   const [uploadHistory, setUploadHistory] = useState<UploadHistoryItem[]>([
@@ -109,42 +112,107 @@ export default function CourseDetailPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative">
+    <div className="min-h-screen w-full bg-[#070C1E] text-white font-sans flex flex-col relative overflow-x-hidden">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 px-4 py-2.5 rounded-xl backdrop-blur-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300 text-xs font-semibold">
-          <CheckCircle2 size={16} className="text-emerald-400" />
-          <span>{toastMessage}</span>
+        <div className="fixed top-20 right-4 sm:right-6 z-50 bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 px-4 py-2.5 rounded-xl backdrop-blur-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300 text-xs font-semibold">
+          <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+          <span className="truncate">{toastMessage}</span>
         </div>
       )}
 
       {/* ================= 1. TOP NAVIGATION BAR ================= */}
-      <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
+      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
-            <GraduationCap size={22} />
+          {/* Tombol Hamburger Mobile */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-slate-900/80 border border-blue-500/20 text-blue-200 hover:text-white transition-all cursor-pointer"
+            aria-label="Toggle Mobile Menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
+            <GraduationCap size={20} />
           </div>
-          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate">
             EduMate AI
           </span>
         </div>
 
-        {/* Akses Cepat Kanan (Notifikasi & Profil Dosen) */}
+        {/* Akses Cepat Kanan (Profil Dosen) */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl cursor-pointer hover:border-cyan-400/40 transition-all">
-            <div className="text-left hidden md:block">
+          <Link href="/dosen/profile" className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl hover:border-cyan-400/40 transition-all">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
+              DL
+            </div>
+            <div className="text-left hidden sm:block">
               <span className="block text-xs font-bold text-white leading-none">Darmawan Lahru Riatma</span>
               <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Dosen</span>
             </div>
-          </div>
+          </Link>
         </div>
       </header>
 
+      {/* ================= MOBILE DRAWER MENU ================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/70 backdrop-blur-md pt-20 px-4">
+          <div className="w-full h-fit bg-slate-900 border border-blue-500/30 p-5 rounded-2xl flex flex-col space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-blue-500/20">
+              <span className="text-xs font-bold text-cyan-300">Menu Navigasi Dosen</span>
+              <button 
+                type="button" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
+              <Link 
+                href="/dosen/dashboard" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <LayoutDashboard size={16} className="text-blue-300/60" />
+                <span>Beranda</span>
+              </Link>
+              <Link 
+                href="/dosen/courses" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold"
+              >
+                <BookOpen size={16} className="text-white" />
+                <span>Mata Kuliah</span>
+              </Link>
+              <Link 
+                href="/dosen/history" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <History size={16} className="text-blue-300/60" />
+                <span>Riwayat</span>
+              </Link>
+              <Link 
+                href="/dosen/profile" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <User size={16} className="text-blue-300/60" />
+                <span>Profil</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
+
       {/* ================= 2. LAYOUT UTAMA (SIDEBAR + CONTENT) ================= */}
-      <div className="flex-1 flex w-full mx-auto p-4 md:p-6 gap-6 overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row max-w-[1600px] w-full mx-auto p-4 sm:p-6 gap-6 overflow-hidden">
         
-        {/* SIDEBAR KIRI */}
+        {/* SIDEBAR KIRI (DESKTOP) */}
         <aside className="w-56 hidden lg:flex flex-col justify-between shrink-0 space-y-4">
           <div className="space-y-1">
             <Link href="/dosen/dashboard" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
@@ -161,11 +229,16 @@ export default function CourseDetailPage() {
               <History size={17} className="text-blue-300/60" />
               <span>Riwayat</span>
             </Link>
+
+            <Link href="/dosen/profile" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all">
+              <User size={17} className="text-blue-300/60" />
+              <span>Profil</span>
+            </Link>
           </div>
         </aside>
 
         {/* AREA KONTEN UTAMA */}
-        <main className="flex-1 flex flex-col min-w-0 space-y-5 overflow-y-auto pr-1">
+        <main className="flex-1 flex flex-col min-w-0 space-y-5 overflow-y-auto pr-0 lg:pr-1">
           
           {/* Breadcrumb & Header Card Mata Kuliah */}
           <div className="space-y-3">
@@ -175,17 +248,17 @@ export default function CourseDetailPage() {
                 <span>Mata Kuliah</span>
               </Link>
               <span>&gt;</span>
-              <span className="text-white font-semibold">Manajemen Proyek</span>
+              <span className="text-white font-semibold truncate">Manajemen Proyek</span>
             </div>
 
             {/* Banner Kartu Mata Kuliah */}
             <div className="bg-slate-900/70 border border-blue-500/20 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 min-w-0">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0 border border-cyan-300/40">
                   <Database size={28} />
                 </div>
-                <div>
-                  <h1 className="text-xl md:text-2xl font-extrabold text-white">Manajemen Proyek</h1>
+                <div className="min-w-0">
+                  <h1 className="text-xl md:text-2xl font-extrabold text-white truncate">Manajemen Proyek</h1>
                 </div>
               </div>
             </div>
@@ -218,7 +291,7 @@ export default function CourseDetailPage() {
                     <button
                       type="button"
                       onClick={() => setDocType('Modul')}
-                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 transition-all font-semibold ${
+                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 transition-all font-semibold cursor-pointer ${
                         docType === 'Modul'
                           ? 'bg-blue-600 text-white border-cyan-400 shadow-lg shadow-blue-600/30'
                           : 'bg-slate-950 border-blue-500/20 text-blue-300/70 hover:bg-slate-800'
@@ -231,7 +304,7 @@ export default function CourseDetailPage() {
                     <button
                       type="button"
                       onClick={() => setDocType('RPS')}
-                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 transition-all font-semibold ${
+                      className={`p-2.5 rounded-xl border flex items-center justify-center gap-2 transition-all font-semibold cursor-pointer ${
                         docType === 'RPS'
                           ? 'bg-blue-600 text-white border-cyan-400 shadow-lg shadow-blue-600/30'
                           : 'bg-slate-950 border-blue-500/20 text-blue-300/70 hover:bg-slate-800'
@@ -246,16 +319,16 @@ export default function CourseDetailPage() {
                 {/* Judul Dokumen / Modul */}
                 <div>
                   <label htmlFor="docTitleInput" className="block font-semibold text-blue-200 mb-1">
-                    Judul Dokumen / Modul
+                    Judul Dokumen / Modul <span className="text-red-400">*</span>
                   </label>
                   <input
                     id="docTitleInput"
                     type="text"
                     required
-                    placeholder="Contoh: Modul 1 - Konsep Dasar Basis Data"
+                    placeholder="Contoh: Modul 1 - Konsep Dasar..."
                     value={uploadTitle}
                     onChange={(e) => setUploadTitle(e.target.value)}
-                    className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"
+                    className="w-full bg-slate-950 border border-blue-500/30 rounded-xl px-3.5 py-2.5 text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all text-xs"
                   />
                 </div>
 
@@ -277,8 +350,8 @@ export default function CourseDetailPage() {
                       }}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
-                    <CloudUpload size={32} className="text-cyan-400" />
-                    <p className="text-xs text-white font-medium">
+                    <CloudUpload size={32} className="text-cyan-400 shrink-0" />
+                    <p className="text-xs text-white font-medium truncate max-w-full px-2">
                       {selectedFileName || 'Klik untuk memilih berkas atau drag and drop di sini'}
                     </p>
                     <p className="text-[10px] text-blue-300/50">
@@ -290,7 +363,7 @@ export default function CourseDetailPage() {
                 {/* Tombol Submit Upload */}
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30 cursor-pointer"
                 >
                   <Upload size={15} />
                   <span>Upload</span>
@@ -303,27 +376,21 @@ export default function CourseDetailPage() {
             {/* KOLOM KANAN: Riwayat Upload (7 Kolom) */}
             <div className="lg:col-span-7 bg-slate-900/60 border border-blue-500/20 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-xl space-y-4">
               
-              <div className="flex items-center justify-between border-b border-blue-500/15 pb-3">
-                <div className="space-y-0.5">
-                  <h2 className="text-sm font-bold text-white flex items-center gap-2">
-                    <History size={16} className="text-cyan-400" />
-                    <span>Riwayat Upload</span>
+              <div className="flex items-center justify-between border-b border-blue-500/15 pb-3 gap-2">
+                <div className="space-y-0.5 min-w-0">
+                  <h2 className="text-sm font-bold text-white flex items-center gap-2 truncate">
+                    <History size={16} className="text-cyan-400 shrink-0" />
+                    <span className="truncate">Riwayat Upload</span>
                   </h2>
-                  <p className="text-[10px] text-blue-200/60">
-                    Dokumen yang telah diunggah akan langsung terlihat di sini secara real-time.
+                  <p className="text-[10px] text-blue-200/60 truncate">
+                    Dokumen yang telah diunggah terlihat secara real-time.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[10px] font-semibold">
                     Real-time
                   </span>
-                  <button
-                    type="button"
-                    aria-label="Refresh Riwayat"
-                    className="p-1.5 rounded-lg bg-slate-950 border border-blue-500/20 text-blue-300 hover:text-white transition-all"
-                  >
-                  </button>
                 </div>
               </div>
 
@@ -366,13 +433,13 @@ export default function CourseDetailPage() {
                         </div>
                       </div>
 
-                      {/* Tombol Aksi (Lihat & Hapus) */}
+                      {/* Tombol Aksi Hapus */}
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           type="button"
                           aria-label="Hapus dokumen"
                           onClick={() => handleDeleteHistory(item.id)}
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-900 transition-all"
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-slate-900 transition-all cursor-pointer"
                           title="Hapus Dokumen"
                         >
                           <Trash2 size={15} />
