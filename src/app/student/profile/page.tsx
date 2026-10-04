@@ -15,7 +15,9 @@ import {
   X, 
   LayoutDashboard,
   Calendar,
-  Menu
+  Menu,
+  History,
+  MessageSquareText
 } from 'lucide-react';
 
 interface UserProfile {
@@ -96,9 +98,10 @@ export default function ProfilePage() {
       )}
 
       {/* ================= 1. TOP NAVIGATION BAR ================= */}
-      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-3">
-          {/* Tombol Hamburger Mobile */}
+      <header className="h-16 px-4 sm:px-6 border-b border-blue-500/15 bg-slate-950/70 backdrop-blur-xl grid grid-cols-[auto_1fr_auto] items-center sticky top-0 z-40 gap-4">
+        
+        {/* Kolom Kiri: Logo & Tombol Mobile */}
+        <div className="flex items-center gap-3 justify-start">
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -111,37 +114,62 @@ export default function ProfilePage() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 shrink-0">
             <GraduationCap size={20} />
           </div>
-          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate">
+          <span className="text-base font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent truncate hidden sm:inline">
             EduMate AI
           </span>
         </div>
 
-        {/* Navigasi Utama Desktop */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 p-1 rounded-2xl border border-blue-500/15">
+        {/* Kolom Tengah: Navigasi Utama Desktop */}
+        <nav className="hidden md:flex items-center justify-center gap-1 bg-slate-900/40 p-1 rounded-2xl border border-blue-500/15 mx-auto">
           <Link
             href="/student/courses"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all whitespace-nowrap"
           >
             <LayoutDashboard size={14} />
             <span>Beranda</span>
           </Link>
 
-          <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
+          <Link
+            href="/student/chat/Manpro"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all whitespace-nowrap"
+          >
+            <MessageSquareText size={14} />
+            <span>Tanya AI</span>
+          </Link>
+
+          <Link
+            href="/student/history/Manpro"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all whitespace-nowrap"
+          >
+            <History size={14} />
+            <span>Riwayat</span>
+          </Link>
+
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30 whitespace-nowrap">
             <User size={14} />
             <span>Profil</span>
           </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <LogOut size={14} />
+            <span>Keluar</span>
+          </button>
         </nav>
 
-        {/* Logout Quick Action (Desktop) */}
-        <button
-          type="button"
-          onClick={handleLogout}
-          aria-label="Keluar dari akun"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-xs font-medium transition-all"
-        >
-          <LogOut size={14} />
-          <span>Keluar</span>
-        </button>
+        {/* Kolom Kanan: Profil Singkat */}
+        <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl shrink-0">
+            <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold border border-cyan-400/40 shrink-0">
+              ZZ
+            </div>
+            <span className="text-xs font-bold text-white hidden lg:block">Zam Zam</span>
+          </div>
+        </div>
+
       </header>
 
       {/* ================= MOBILE DRAWER MENU ================= */}
@@ -156,6 +184,22 @@ export default function ProfilePage() {
               >
                 <LayoutDashboard size={16} />
                 <span>Beranda</span>
+              </Link>
+              <Link
+                href="/student/chat/Manpro"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <MessageSquareText size={16} />
+                <span>Tanya AI</span>
+              </Link>
+              <Link
+                href="/student/history/Manpro"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <History size={16} />
+                <span>Riwayat</span>
               </Link>
               <Link
                 href="/student/profile"

@@ -96,7 +96,7 @@ export default function LecturerProfilePage() {
 
         {/* Akses Cepat Kanan (Profil User Header) */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl">
+          <Link href="/dosen/profile" className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl hover:border-cyan-400/40 transition-all">
             <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
               DL
             </div>
@@ -104,7 +104,7 @@ export default function LecturerProfilePage() {
               <span className="block text-xs font-bold text-white leading-none">Darmawan Lahru Riatma</span>
               <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Dosen</span>
             </div>
-          </div>
+          </Link>
         </div>
       </header>
 
@@ -163,8 +163,6 @@ export default function LecturerProfilePage() {
                 <User size={16} className="text-white" />
                 <span>Profil</span>
               </Link>
-            </nav>
-            <div className="pt-2 border-t border-blue-500/20">
               <button
                 type="button"
                 onClick={() => {
@@ -176,7 +174,7 @@ export default function LecturerProfilePage() {
                 <LogOut size={16} />
                 <span>Keluar</span>
               </button>
-            </div>
+            </nav>
           </div>
         </div>
       )}
@@ -211,18 +209,17 @@ export default function LecturerProfilePage() {
               <User size={17} className="text-white" />
               <span>Profil</span>
             </Link>
-          </div>
 
-          <div className="pt-3 border-t border-blue-500/15">
-            {/* Tombol Keluar di Sidebar */}
-            <button
-              type="button"
-              onClick={() => router.push('/login')}
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
-            >
-              <LogOut size={17} />
-              <span>Keluar</span>
-            </button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => router.push('/login')}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
+              >
+                <LogOut size={17} />
+                <span>Keluar</span>
+              </button>
+            </div>
           </div>
         </aside>
 

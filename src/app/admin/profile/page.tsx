@@ -25,7 +25,7 @@ export default function AdminProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [adminData, setAdminData] = useState({
-    name: 'Tim Admin EduMate',
+    name: 'Admin',
     email: 'admin@uns.ac.id',
     totalManagedUsers: 142,
     systemActivityLogs: 1250,

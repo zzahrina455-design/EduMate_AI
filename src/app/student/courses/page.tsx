@@ -204,7 +204,7 @@ export default function CoursesPage() {
           {/* Menu Aktif: Mata Kuliah */}
           <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
             <BookOpen size={14} />
-            <span>Mata Kuliah</span>
+            <span>Beranda</span>
           </div>
 
           <Link
@@ -233,7 +233,6 @@ export default function CoursesPage() {
             </div>
             <div className="text-left hidden lg:block">
               <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
-              <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
             </div>
           </div>
         </div>

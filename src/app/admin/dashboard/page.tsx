@@ -123,9 +123,9 @@ export default function TendikDashboardPage() {
             className="flex items-center gap-2.5 bg-slate-900/60 border border-blue-500/20 px-3 py-1.5 rounded-xl hover:border-cyan-400/40 transition-all"
           >
             <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
-              T
+              AD
             </div>
-            <span className="text-xs font-bold text-white">Tendik</span>
+            <span className="text-xs font-bold text-white">Admin</span>
           </button>
         </header>
 

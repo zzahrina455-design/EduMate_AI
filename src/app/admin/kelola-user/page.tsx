@@ -162,6 +162,18 @@ export default function KelolaUserPage() {
               <History size={17} />
               <span>Riwayat</span>
             </Link>
+
+            <Link
+              href="/admin/profile"
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left ${
+                activeMenu === 'profile'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30'
+                  : 'text-blue-200/60 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <User size={17} />
+              <span>Profil</span>
+            </Link>
           </nav>
         </div>
       </aside>
@@ -171,22 +183,15 @@ export default function KelolaUserPage() {
         
         <header className="h-16 px-6 border-b border-blue-500/15 bg-slate-950/60 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
           
-          <div className="relative w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300/40" size={15} />
-            <input
-              type="text"
-              placeholder="Cari sesuatu..."
-              className="w-full bg-slate-900/80 border border-blue-500/20 rounded-xl pl-9 pr-4 py-1.5 text-xs text-white placeholder-blue-300/40 focus:outline-none focus:border-cyan-400 transition-all"
-            />
-          </div>
+          <div className="relative w-72"></div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 bg-slate-900/80 border border-blue-500/20 px-3 py-1.5 rounded-xl">
+            <Link href="/admin/profile" className="flex items-center gap-2.5 bg-slate-900/80 border border-blue-500/20 px-3 py-1.5 rounded-xl hover:border-cyan-400/40 transition-all">
               <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
-                T
+                AD
               </div>
               <span className="text-xs font-bold text-white">Admin</span>
-            </div>
+            </Link>
 
             <button
               type="button"
@@ -279,7 +284,7 @@ export default function KelolaUserPage() {
                 />
               </div>
 
-              {/* Dropdown Filters dengan Posisi Simbol Panah Agak Ditengahkan */}
+              {/* Dropdown Filters */}
               <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                 
                 {/* Filter Role */}

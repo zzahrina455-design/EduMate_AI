@@ -213,8 +213,6 @@ export default function LecturerHistoryPage() {
                 <User size={16} className="text-blue-300/60" />
                 <span>Profil</span>
               </Link>
-            </nav>
-            <div className="pt-2 border-t border-blue-500/20">
               <button
                 type="button"
                 onClick={() => {
@@ -226,7 +224,7 @@ export default function LecturerHistoryPage() {
                 <LogOut size={16} />
                 <span>Keluar</span>
               </button>
-            </div>
+            </nav>
           </div>
         </div>
       )}
@@ -256,17 +254,17 @@ export default function LecturerHistoryPage() {
               <User size={17} className="text-blue-300/60" />
               <span>Profil</span>
             </Link>
-          </div>
 
-          <div className="pt-3 border-t border-blue-500/15">
-            <button
-              type="button"
-              onClick={() => router.push('/login')}
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
-            >
-              <LogOut size={17} />
-              <span>Keluar</span>
-            </button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => router.push('/login')}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
+              >
+                <LogOut size={17} />
+                <span>Keluar</span>
+              </button>
+            </div>
           </div>
         </aside>
 

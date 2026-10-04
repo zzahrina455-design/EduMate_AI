@@ -12,6 +12,8 @@ import {
   GraduationCap,
   MessageSquareText,
   History,
+  User,
+  LogOut,
   Menu,
   X
 } from 'lucide-react';
@@ -112,28 +114,45 @@ export default function ChatHistoryPage() {
         <nav className="hidden md:flex items-center gap-1 bg-slate-900/40 p-1 rounded-2xl border border-blue-500/15">
           <Link
             href="/student/courses"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
           >
             <BookOpen size={14} />
-            <span>Mata Kuliah</span>
+            <span>Beranda</span>
           </Link>
 
           <Link
             href="/student/chat/Manpro"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
           >
             <MessageSquareText size={14} />
-            <span>Tanya Jawab</span>
+            <span>Tanya AI</span>
           </Link>
 
           {/* Menu Aktif: Riwayat */}
-          <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-cyan-400/30">
             <History size={14} />
             <span>Riwayat</span>
           </div>
+
+          <Link
+            href="/student/profile"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white transition-all"
+          >
+            <User size={14} />
+            <span>Profil</span>
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => router.push('/login')}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer"
+          >
+            <LogOut size={14} />
+            <span>Keluar</span>
+          </button>
         </nav>
 
-        {/* Profil Singkat */}
+        {/* Profil Singkat (Kanan Atas) */}
         <div className="flex items-center gap-2 bg-slate-900/60 border border-blue-500/20 px-2.5 py-1 rounded-xl shrink-0">
           <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-[11px] font-bold border border-cyan-400/40 shrink-0">
             ZZ
@@ -153,7 +172,7 @@ export default function ChatHistoryPage() {
                 className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
               >
                 <BookOpen size={16} />
-                <span>Mata Kuliah</span>
+                <span>Beranda</span>
               </Link>
               <Link
                 href="/student/chat/Manpro"
@@ -161,7 +180,7 @@ export default function ChatHistoryPage() {
                 className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
               >
                 <MessageSquareText size={16} />
-                <span>Tanya Jawab</span>
+                <span>Tanya AI</span>
               </Link>
               <Link
                 href="/student/history"
@@ -171,6 +190,25 @@ export default function ChatHistoryPage() {
                 <History size={16} />
                 <span>Riwayat</span>
               </Link>
+              <Link
+                href="/student/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <User size={16} />
+                <span>Profil</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  router.push('/login');
+                }}
+                className="w-full flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-left cursor-pointer"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </button>
             </nav>
           </div>
         </div>
@@ -183,7 +221,7 @@ export default function ChatHistoryPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-              Riwayat Tanya Jawab
+              Riwayat Tanya AI
             </h1>
             <p className="text-xs sm:text-sm text-blue-200/70 mt-1">
               Cari semua pertanyaan dan jawaban yang pernah kamu tanyakan sebelumnya.

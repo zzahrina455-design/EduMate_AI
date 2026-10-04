@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   GraduationCap, 
   LayoutDashboard, 
   BookOpen,
   History,
   User,
-  ArrowLeft, 
   Database,
   Upload, 
   FileText, 
@@ -16,7 +16,8 @@ import {
   Trash2,
   CheckCircle2,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 
 interface UploadHistoryItem {
@@ -28,6 +29,8 @@ interface UploadHistoryItem {
 }
 
 export default function CourseDetailPage() {
+  const router = useRouter();
+
   // State Form Upload, Mobile Menu, & Toast
   const [docType, setDocType] = useState<'Modul' | 'RPS'>('Modul');
   const [uploadTitle, setUploadTitle] = useState('');
@@ -181,7 +184,7 @@ export default function CourseDetailPage() {
                 <span>Beranda</span>
               </Link>
               <Link 
-                href="/dosen/courses" 
+                href="/dosen/courses/Manpro" 
                 onClick={() => setMobileMenuOpen(false)} 
                 className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold"
               >
@@ -204,6 +207,17 @@ export default function CourseDetailPage() {
                 <User size={16} className="text-blue-300/60" />
                 <span>Profil</span>
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  router.push('/login');
+                }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium cursor-pointer text-left"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </button>
             </nav>
           </div>
         </div>
@@ -220,7 +234,7 @@ export default function CourseDetailPage() {
               <span>Beranda</span>
             </Link>
 
-            <Link href="/dosen/courses" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30">
+            <Link href="/dosen/courses/Manpro" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30">
               <BookOpen size={17} className="text-white" />
               <span>Mata Kuliah</span>
             </Link>
@@ -234,6 +248,17 @@ export default function CourseDetailPage() {
               <User size={17} className="text-blue-300/60" />
               <span>Profil</span>
             </Link>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => router.push('/login')}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
+              >
+                <LogOut size={17} />
+                <span>Keluar</span>
+              </button>
+            </div>
           </div>
         </aside>
 
@@ -242,15 +267,6 @@ export default function CourseDetailPage() {
           
           {/* Breadcrumb & Header Card Mata Kuliah */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs text-blue-300/60 font-medium">
-              <Link href="/dosen/courses" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
-                <ArrowLeft size={13} />
-                <span>Mata Kuliah</span>
-              </Link>
-              <span>&gt;</span>
-              <span className="text-white font-semibold truncate">Manajemen Proyek</span>
-            </div>
-
             {/* Banner Kartu Mata Kuliah */}
             <div className="bg-slate-900/70 border border-blue-500/20 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">

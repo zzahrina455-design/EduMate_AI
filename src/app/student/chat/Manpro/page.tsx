@@ -2,9 +2,11 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   GraduationCap, 
   LayoutDashboard, 
+  BookOpen,
   MessageSquareText, 
   History, 
   User, 
@@ -33,6 +35,8 @@ interface AttachedFile {
 }
 
 export default function ChatAIPage() {
+  const router = useRouter();
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [attachedFile, setAttachedFile] = useState<AttachedFile | null>(null);
@@ -116,10 +120,18 @@ export default function ChatAIPage() {
           {/* Menu Navigasi */}
           <nav className="space-y-1.5">
             <Link
-              href="/student/courses/Manpro"
+              href="/student/courses"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all"
             >
               <LayoutDashboard size={17} className="text-blue-300/60" />
+              <span>Beranda</span>
+            </Link>
+
+            <Link
+              href="/student/courses/Manpro"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all"
+            >
+              <BookOpen size={17} className="text-blue-300/60" />
               <span>Mata Kuliah</span>
             </Link>
 
@@ -135,18 +147,24 @@ export default function ChatAIPage() {
               <History size={17} className="text-blue-300/60" />
               <span>Riwayat</span>
             </Link>
-          </nav>
-        </div>
 
-        {/* Tombol Keluar */}
-        <div className="pt-3 border-t border-blue-500/15">
-          <Link
-            href="/student/dashboard"
-            className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
-          >
-            <LogOut size={17} />
-            <span>Keluar</span>
-          </Link>
+            <Link
+              href="/student/profile"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-blue-200/60 hover:text-white hover:bg-slate-800/50 transition-all"
+            >
+              <User size={17} className="text-blue-300/60" />
+              <span>Profil</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => router.push('/login')}
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
+            >
+              <LogOut size={17} />
+              <span>Keluar</span>
+            </button>
+          </nav>
         </div>
       </aside>
 
@@ -166,11 +184,19 @@ export default function ChatAIPage() {
             </div>
             <nav className="flex flex-col space-y-2 text-xs font-medium text-slate-300">
               <Link 
-                href="/student/courses/Manpro" 
+                href="/student/courses" 
                 onClick={() => setMobileMenuOpen(false)} 
                 className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
               >
                 <LayoutDashboard size={16} className="text-blue-300/60" />
+                <span>Beranda</span>
+              </Link>
+              <Link 
+                href="/student/courses/Manpro" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <BookOpen size={16} className="text-blue-300/60" />
                 <span>Mata Kuliah</span>
               </Link>
               <Link 
@@ -189,17 +215,26 @@ export default function ChatAIPage() {
                 <History size={16} className="text-blue-300/60" />
                 <span>Riwayat</span>
               </Link>
-            </nav>
-            <div className="pt-2 border-t border-blue-500/20">
-              <Link
-                href="/student/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium"
+              <Link 
+                href="/student/profil" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-950/60 border border-blue-500/10 text-blue-200 hover:text-white transition-all"
+              >
+                <User size={16} className="text-blue-300/60" />
+                <span>Profil</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  router.push('/login');
+                }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium text-left cursor-pointer"
               >
                 <LogOut size={16} />
                 <span>Keluar</span>
-              </Link>
-            </div>
+              </button>
+            </nav>
           </div>
         </div>
       )}
@@ -238,7 +273,6 @@ export default function ChatAIPage() {
               </div>
               <div className="text-left hidden sm:block">
                 <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
-                <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
               </div>
             </div>
           </div>

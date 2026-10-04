@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   GraduationCap, 
   BookOpen, 
@@ -17,7 +18,8 @@ import {
   X, 
   CheckCircle2, 
   Trash2,
-  Menu
+  Menu,
+  LogOut
 } from 'lucide-react';
 
 interface NoteItem {
@@ -29,6 +31,8 @@ interface NoteItem {
 }
 
 export default function CourseDetailPage() {
+  const router = useRouter();
+
   // State untuk Modal, Input Catatan Baru, & Mobile Menu
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -119,7 +123,6 @@ export default function CourseDetailPage() {
             </div>
             <div className="text-left hidden sm:block">
               <span className="block text-xs font-bold text-white leading-none">Zam Zam</span>
-              <span className="block text-[9px] text-blue-300/60 leading-tight mt-0.5">Mahasiswa</span>
             </div>
           </div>
         </div>
@@ -134,7 +137,7 @@ export default function CourseDetailPage() {
                 <LayoutDashboard size={16} className="text-blue-300/60" />
                 <span>Beranda</span>
               </Link>
-              <Link href="/student/courses" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold">
+              <Link href="/student/courses/Manpro" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30 font-semibold">
                 <BookOpen size={16} className="text-white" />
                 <span>Manajemen Proyek</span>
               </Link>
@@ -150,6 +153,17 @@ export default function CourseDetailPage() {
                 <User size={16} className="text-blue-300/60" />
                 <span>Profil</span>
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  router.push('/login');
+                }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-all text-xs font-medium cursor-pointer text-left"
+              >
+                <LogOut size={16} />
+                <span>Keluar</span>
+              </button>
             </nav>
           </div>
         </div>
@@ -166,7 +180,7 @@ export default function CourseDetailPage() {
               <span>Beranda</span>
             </Link>
 
-            <Link href="/student/courses" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30">
+            <Link href="/student/courses/Manpro" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-blue-600 text-white shadow-lg shadow-blue-600/30 border border-cyan-400/30">
               <BookOpen size={17} className="text-white" />
               <span>Manajemen Proyek</span>
             </Link>
@@ -185,6 +199,17 @@ export default function CourseDetailPage() {
               <User size={17} className="text-blue-300/60" />
               <span>Profil</span>
             </Link>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => router.push('/login')}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left cursor-pointer"
+              >
+                <LogOut size={17} />
+                <span>Keluar</span>
+              </button>
+            </div>
           </div>
         </aside>
 
