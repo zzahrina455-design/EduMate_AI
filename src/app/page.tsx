@@ -106,13 +106,13 @@ export default function LandingPage() {
         <div className="space-y-6 text-center lg:text-left">
           <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900/60 border border-cyan-500/30 text-xs text-cyan-300">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span>AI Learning Companion berbasis RAG</span>
+            <span>EduMate AI</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-            Belajar Lebih Mudah dengan <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Informasi yang Tepat</span>
+            Temukan Lomba yang Tepat<span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> Untuk Inovasimu </span>
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            AI Learning Companion berbasis RAG untuk membantu mahasiswa, dosen, dan admin dalam mencari informasi akademik dari jurnal, RPS, dan modul terpercaya.
+            EduMate AI berbasis RAG untuk membantu mahasiswa menemukan lomba paling relevan berdasarkan ide, SKPL, dan arsitektur proyek yang diunggah, sehingga potensi inovasi dapat berkembang melalui kompetisi yang sesuai.
           </p>
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 pt-2">
             <Link href="/register" className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-sm shadow-lg shadow-cyan-500/30 hover:scale-[1.02] transition flex items-center justify-center space-x-2">
@@ -131,7 +131,7 @@ export default function LandingPage() {
             </div>
             <div className="bg-slate-900/40 p-3 rounded-xl text-center border border-white/5">
               <Layers className="w-5 h-5 text-cyan-400 mx-auto mb-1" />
-              <span className="text-[11px] sm:text-xs text-slate-300 font-medium">RPS & Modul</span>
+              <span className="text-[11px] sm:text-xs text-slate-300 font-medium">SKPL</span>
             </div>
             <div className="bg-slate-900/40 p-3 rounded-xl text-center border border-white/5">
               <ShieldCheck className="w-5 h-5 text-cyan-400 mx-auto mb-1" />
@@ -148,15 +148,15 @@ export default function LandingPage() {
               <Bot className="w-12 h-12 sm:w-14 sm:h-14 text-white" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg sm:text-xl font-bold text-white">EduMate Assistant</h3>
-              <p className="text-xs sm:text-sm text-slate-300">Siap menjawab pertanyaan akademikmu secara instan berdasarkan dokumen perkuliahan.</p>
+              <h3 className="text-lg sm:text-xl font-bold text-white">EduMate AI</h3>
+              <p className="text-xs sm:text-sm text-slate-300">Siap membantu menemukan rekomendasi lomba yang relevan berdasarkan ide, SKPL, dan arsitektur proyek yang kamu unggah.</p>
             </div>
             <div className="w-full bg-slate-950/60 p-4 rounded-xl text-left space-y-2 border border-white/10">
               <div className="flex items-center space-x-2 text-xs text-cyan-400 font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Contoh Pertanyaan RAG:</span>
+                <span>Contoh Permintaan Rekomendasi:</span>
               </div>
-              <p className="text-xs text-slate-300 italic">&ldquo;Apa perbedaan inheritance dan polymorphism pada Java berdasarkan modul PBO?&rdquo;</p>
+              <p className="text-xs text-slate-300 italic">&ldquo;Rekomendasikan lomba yang sesuai dengan proyek sistem monitoring berbasis IoT ini berdasarkan SKPL dan arsitektur proyek yang telah saya unggah.&rdquo;</p>
             </div>
           </div>
         </div>
@@ -170,10 +170,10 @@ export default function LandingPage() {
             <span>FITUR UNGGULAN</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
-            Fitur Cerdas untuk <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Efisiensi Belajar</span>
+            Temukan Peluang Kompetisi <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Dengan AI</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-            EduMate AI menggabungkan teknologi AI mutakhir dengan basis pengetahuan perkuliahan resmi agar pembelajaran Anda lebih terstruktur dan presisi.
+            EduMate AI memanfaatkan kecerdasan buatan untuk menganalisis proyek dan merekomendasikan kompetisi yang relevan berdasarkan ide, kebutuhan sistem, serta arsitektur proyek yang kamu kembangkan.
           </p>
         </div>
 
@@ -182,9 +182,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
               <BrainCircuit className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">RAG Multi-Source Search</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Analisis Dokumen Proyek</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Jawaban AI dihasilkan murni berdasarkan ekstraksi isi dokumen RPS, modul dosen, dan referensi jurnal terverifikasi tanpa halusinasi.
+              Unggah dokumen SKPL, arsitektur proyek, atau deskripsi ide untuk membantu AI memahami tujuan, fitur, teknologi, dan ruang lingkup proyek yang kamu kembangkan.
             </p>
           </div>
 
@@ -192,9 +192,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
               <BookOpen className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Ruangan Per Mata Kuliah</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Rekomendasi Lomba yang Relevan</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Setiap mata kuliah memiliki ruang khusus yang terorganisir lengkap dengan materi, modul PDF/Video, serta forum diskusi terpadu.
+              Temukan rekomendasi lomba berdasarkan kesesuaian tema, kategori, bidang teknologi, dan tujuan proyek agar kamu dapat memilih kompetisi yang tepat.
             </p>
           </div>
 
@@ -202,9 +202,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
               <StickyNote className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Pencatatan & Agenda Tugas</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Pencocokan Kriteria Kompetisi</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Catat tugas penting dan atur batas waktu pengerjaan langsung dari ruangan mata kuliah dengan integrasi kalender interaktif.
+              AI membantu mencocokkan karakteristik proyek dengan persyaratan dan kriteria lomba untuk mengidentifikasi peluang kompetisi yang potensial.
             </p>
           </div>
 
@@ -212,9 +212,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
               <Users className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Hak Akses Multi-Role</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Dukungan Berbagai Jenis Proyek</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Disesuaikan khusus untuk kebutuhan Mahasiswa, Dosen Pengampu (kelola modul), dan Administrator Kampus secara aman.
+              Dirancang untuk mendukung beragam ide dan pengembangan proyek, mulai dari aplikasi web, kecerdasan buatan, Internet of Things (IoT), hingga inovasi teknologi lainnya.
             </p>
           </div>
 
@@ -222,9 +222,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
               <FileText className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Riwayat & Sitasi Otomatis</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Referensi dan Informasi Lomba</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Setiap sesi tanya jawab tersimpan rapi dan dilengkapi dengan kutipan sumber asli untuk mempermudah pengerjaan karya ilmiah.
+              Dapatkan informasi pendukung mengenai kompetisi yang direkomendasikan agar kamu lebih mudah memahami relevansi lomba dengan proyek yang dikembangkan.
             </p>
           </div>
 
@@ -232,9 +232,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Keamanan Data Akademik</h3>
+            <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">Pengembangan Strategi Kompetisi</h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Seluruh dokumen dan riwayat perkuliahan dilindungi dengan enkripsi tingkat tinggi untuk menjamin kerahasiaan kampus.
+              Gunakan hasil rekomendasi sebagai bahan pertimbangan untuk menentukan kompetisi yang sesuai, mengevaluasi kesiapan proyek, dan merencanakan pengembangan inovasi selanjutnya.
             </p>
           </div>
         </div>
@@ -250,44 +250,44 @@ export default function LandingPage() {
               <span>TENTANG EDUMATE AI</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug">
-              Membawa Masa Depan Pembelajaran ke <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Lingkungan Akademik Anda</span>
+              Menghubungkan Inovasi <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Dengan Peluang Kompetisi</span>
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              EduMate AI lahir dari kebutuhan civitas akademika akan akses informasi perkuliahan yang cepat, tepat, dan terpercaya. Dengan memanfaatkan Retrieval-Augmented Generation (RAG), kami menghilangkan hambatan pencarian dokumen manual di ribuan halaman PDF modul.
+              EduMate AI hadir untuk membantu mahasiswa menemukan peluang kompetisi yang relevan dengan proyek yang mereka kembangkan. Dengan memanfaatkan kecerdasan buatan, sistem menganalisis dokumen seperti SKPL, arsitektur proyek, dan deskripsi ide untuk memberikan rekomendasi lomba yang sesuai dengan karakteristik dan tujuan proyek.
             </p>
 
             <div className="space-y-3 pt-2 text-left">
               <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-200">
                 <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <span>Meningkatkan efisiensi pemahaman materi perkuliahan hingga 70%.</span>
+                <span>Membantu mahasiswa menemukan kompetisi yang relevan dengan ide dan bidang proyek mereka.</span>
               </div>
               <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-200">
                 <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <span>Mengurangi risiko kesalahan informasi ilmiah berkat pemetaan sitasi dokumen resmi.</span>
+                <span>Mempermudah proses pencarian lomba melalui analisis dokumen proyek secara lebih terarah.</span>
               </div>
               <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-200">
                 <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <span>Mendukung produktivitas dosen dalam mendistribusikan RPS dan bahan ajar digital.</span>
+                <span>Mendukung mahasiswa dalam mengidentifikasi peluang kompetisi untuk mengembangkan inovasi dan potensi proyek.</span>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:gap-6">
             <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center space-y-2">
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">99.8%</h3>
-              <p className="text-xs text-slate-300 font-medium">Akurasi Jawaban Dokumen</p>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">Berbasis AI</h3>
+              <p className="text-xs text-slate-300 font-medium">Analisis Dokumen Proyek</p>
             </div>
             <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center space-y-2">
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">24/7</h3>
-              <p className="text-xs text-slate-300 font-medium">Asisten AI Siap Sedia</p>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">Lebih Terarah</h3>
+              <p className="text-xs text-slate-300 font-medium">Rekomendasi Lomba Relevan</p>
             </div>
             <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center space-y-2">
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">100+</h3>
-              <p className="text-xs text-slate-300 font-medium">Modul Matkul Terintegrasi</p>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">Multi-Format</h3>
+              <p className="text-xs text-slate-300 font-medium">SKPL, Arsitektur, dan Ide</p>
             </div>
             <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center space-y-2">
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">&lt; 2 dtk</h3>
-              <p className="text-xs text-slate-300 font-medium">Kecepatan Respons RAG</p>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-cyan-400">Beragam Bidang</h3>
+              <p className="text-xs text-slate-300 font-medium">Peluang Kompetisi</p>
             </div>
           </div>
 
@@ -440,7 +440,7 @@ export default function LandingPage() {
               <span className="text-base font-bold text-white">EduMate AI</span>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              Platform AI Learning Companion berbasis RAG untuk kemudahan akses pengetahuan perkuliahan yang akurat dan terpercaya.
+              Platform rekomendasi lomba berbasis AI yang membantu menemukan kompetisi relevan melalui analisis ide, SKPL, dan arsitektur proyek secara cerdas dan terarah.
             </p>
           </div>
 
