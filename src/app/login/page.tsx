@@ -18,31 +18,45 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    // Simulasi jeda loading seolah-olah menghubungi server (1 detik)
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // Mengirim request ke backend FastAPI melalui rewrites Next.js (/api/auth/login)
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Simulasi deteksi role berdasarkan email untuk keperluan demo frontend
-      let simulatedRole = 'mahasiswa';
-      if (email.includes('admin')) simulatedRole = 'admin';
-      else if (email.includes('dosen')) simulatedRole = 'dosen';
+      const data = await response.json();
 
-      const mockUser = { name: 'Demo User', email, role: simulatedRole };
-      const mockToken = 'mock-jwt-token-frontend-only';
+      if (!response.ok) {
+        throw new Error(data.detail || 'Login gagal. Periksa kembali email dan password.');
+      }
 
-      // Simpan ke localStorage agar halaman dashboard bisa membacanya
-      localStorage.setItem('access_token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
+      // Simpan JWT token dan data user ke localStorage
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      document.cookie = `access_token=${data.access_token}; path=/; max-age=86400; SameSite=Lax`;
 
-      // Redirect berdasarkan role simulasi
-      if (simulatedRole === 'admin') {
+      // Redirect berdasarkan role dari database PostgreSQL
+      if (data.user.role === 'admin') {
         router.push('/admin/dashboard');
-      } else if (simulatedRole === 'dosen') {
+      } else if (data.user.role === 'dosen') {
         router.push('/dosen/dashboard');
       } else {
         router.push('/student/courses');
       }
-    }, 1000);
+
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Terjadi kesalahan saat terhubung ke server backend.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,37 +69,36 @@ export default function LoginPage() {
             <Bot className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-            EduMate AI (Frontend Mode)
+            EduMate AI
           </h1>
           <p className="text-xs text-slate-300">
-            Masuk tanpa backend untuk uji tampilan
+            Masuk untuk melanjutkan perjalananmu
           </p>
         </div>
 
         <form className="space-y-4 sm:space-y-5" onSubmit={handleLogin}>
           <div className="space-y-1.5">
-            <label htmlFor="name" className="text-xs font-medium text-slate-300">Email</label>
+            <label htmlFor="email-input" className="text-xs font-medium text-slate-300">Email</label>
             <div className="relative">
               <Mail className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
+                id="email-input"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="mahasiswa@student.uns.ac.id"
+                placeholder="nama@student.uns.ac.id"
                 className="w-full bg-slate-950/80 border border-blue-500/30 rounded-xl py-3 pl-11 pr-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
               />
             </div>
-            <p className="text-[10px] text-slate-400 mt-1">
-              Tips: Ketik &quot;admin&quot; atau &quot;dosen&quot; di email untuk simulasi masuk sebagai admin/dosen.
-            </p>
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="name" className="text-xs font-medium text-slate-300">Password</label>
+            <label htmlFor="password-input" className="text-xs font-medium text-slate-300">Password</label>
             <div className="relative">
               <Lock className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
+                id="password-input"
                 type="password"
                 required
                 value={password}
@@ -107,7 +120,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-xs sm:text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition flex items-center justify-center space-x-2 cursor-pointer mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <span>{loading ? 'Memproses Simulasi...' : 'Login (Demo)'}</span>
+            <span>{loading ? 'Memproses...' : 'Login'}</span>
             {!loading && <ArrowRight className="w-4 h-4" />}
           </button>
         </form>
