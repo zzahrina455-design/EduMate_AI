@@ -61,18 +61,10 @@ export default function proxy(request: NextRequest) {
     }
   }
 
-  // --- PROTEKSI DOSEN ---
-  if (pathname.startsWith('/dosen')) {
-    if (role !== 'dosen' && role !== 'admin') {
-      console.log('AKSES DITOLAK: BUKAN DOSEN');
-      return redirectToDashboard(role, request);
-    }
-  }
-
-  // --- PROTEKSI MAHASISWA ---
+  // --- PROTEKSI MAHASISWA / STUDENT ---
   if (pathname.startsWith('/student')) {
-    if (role !== 'mahasiswa' && role !== 'admin') {
-      console.log('AKSES DITOLAK: BUKAN MAHASISWA');
+    if (role !== 'student' && role !== 'mahasiswa' && role !== 'admin') {
+      console.log('AKSES DITOLAK: BUKAN STUDENT/MAHASISWA');
       return redirectToDashboard(role, request);
     }
   }
@@ -85,14 +77,11 @@ function redirectToDashboard(role: string, request: NextRequest) {
   if (role === 'admin') {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
-  if (role === 'dosen') {
-    return NextResponse.redirect(new URL('/dosen/dashboard', request.url));
+  if (role === 'student' || role === 'mahasiswa') {
+    return NextResponse.redirect(new URL('/student', request.url));
   }
-  if (role === 'mahasiswa') {
-    return NextResponse.redirect(new URL('/student/courses', request.url));
-  }
-  
-  // PERBAIKAN UTAMA: Jika role sama sekali tidak dikenal, hapus cookie dan paksa ke login!
+
+  // Jika role sama sekali tidak dikenal, hapus cookie dan paksa ke login!
   const response = NextResponse.redirect(new URL('/login', request.url));
   response.cookies.delete('access_token');
   return response;
@@ -101,7 +90,6 @@ function redirectToDashboard(role: string, request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/dosen/:path*',
     '/student/:path*',
   ],
 };

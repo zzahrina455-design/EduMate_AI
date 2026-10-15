@@ -34,18 +34,16 @@ export default function LoginPage() {
         throw new Error(data.detail || 'Login gagal. Periksa kembali email dan password.');
       }
 
-      // Simpan JWT token dan data user ke localStorage
+      // Simpan JWT token dan data user ke localStorage & cookie
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
       document.cookie = `access_token=${data.access_token}; path=/; max-age=86400; SameSite=Lax`;
 
-      // Redirect berdasarkan role dari database PostgreSQL
+      // Redirect berdasarkan role dari database PostgreSQL (admin vs non-admin)
       if (data.user.role === 'admin') {
         router.push('/admin/dashboard');
-      } else if (data.user.role === 'dosen') {
-        router.push('/dosen/dashboard');
       } else {
-        router.push('/student/courses');
+        router.push('/student');
       }
 
     } catch (err) {
