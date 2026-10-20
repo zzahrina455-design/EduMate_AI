@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   History as HistoryIcon,
@@ -28,72 +28,115 @@ interface HistoryItem {
   status: 'Completed' | 'Pending';
   score?: string;
   conversation: ChatMessage[];
+  file_path?: string | null;
 }
+
+// Helper function native untuk mengambil cookie tanpa js-cookie
+const getCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+};
+
+// Helper function native untuk menghapus cookie
+const eraseCookie = (name: string) => {
+  if (typeof document !== 'undefined') {
+    document.cookie = `${name}=; Max-Age=-99999999; path=/;`;
+  }
+};
 
 export default function HistoryPage() {
   const router = useRouter();
-
-  const [historyList, setHistoryList] = useState<HistoryItem[]>([
-    {
-      id: 'h1',
-      activity: 'Mengikuti Kuis Interaktif Pemrograman Web',
-      timestamp: '12 Okt 2026, 14:30',
-      status: 'Completed',
-      score: '95/100',
-      conversation: [
-        { id: 'c1', sender: 'user', text: 'Mulai sesi kuis pemrograman web.', time: '14:30' },
-        { id: 'c2', sender: 'ai', text: 'Pertanyaan 1: Apa fungsi utama dari tag <section> dalam HTML5?', time: '14:31' },
-        { id: 'c3', sender: 'user', text: 'Tag <section> digunakan untuk mengelompokkan konten yang memiliki tema serupa.', time: '14:32' },
-        { id: 'c4', sender: 'ai', text: 'Jawaban Anda tepat! Skor sementara: 100.', time: '14:32' }
-      ]
-    },
-    {
-      id: 'h2',
-      activity: 'Mengumpulkan Tugas Besar Manajemen Proyek',
-      timestamp: '10 Okt 2026, 21:00',
-      status: 'Completed',
-      score: 'A',
-      conversation: [
-        { id: 'c1', sender: 'user', text: 'Saya ingin mengunggah draft proposal proyek EduMate AI.', time: '21:00' },
-        { id: 'c2', sender: 'ai', text: 'Proposal berhasil diterima. Apakah Anda ingin langsung mengecek analisis kelayakan proyek?', time: '21:01' },
-        { id: 'c3', sender: 'user', text: 'Ya, berikan ringkasan analisisnya.', time: '21:02' },
-        { id: 'c4', sender: 'ai', text: 'Berdasarkan dokumen, aspek teknis dan time-frame sudah sangat realistis.', time: '21:02' }
-      ]
-    },
-    {
-      id: 'h3',
-      activity: 'Pendaftaran Kompetisi UI/UX Gemastik',
-      timestamp: '08 Okt 2026, 10:15',
-      status: 'Pending',
-      conversation: [
-        { id: 'c1', sender: 'user', text: 'Tanyakan persyaratan berkas pendaftaran Gemastik UI/UX.', time: '10:15' },
-        { id: 'c2', sender: 'ai', text: 'Persyaratan mencakup KTM aktif, surat rekomendasi prodi, dan poster karya awal.', time: '10:16' }
-      ]
-    },
-    {
-      id: 'h4',
-      activity: 'Sesi Konsultasi Dosen Wali Semester',
-      timestamp: '01 Okt 2026, 13:00',
-      status: 'Completed',
-      conversation: [
-        { id: 'c1', sender: 'user', text: 'Bagaimana saran KRS untuk fokus Software Engineering?', time: '13:00' },
-        { id: 'c2', sender: 'ai', text: 'Direkomendasikan mengambil mata kuliah Pemrograman Berorientasi Objek dan Manajemen Basis Data.', time: '13:01' }
-      ]
-    }
-  ]);
-
+  const [historyList, setHistoryList] = useState<HistoryItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchHistory = async () => {
+    setLoading(true);
+    // Mengambil token menggunakan helper native
+    const token = getCookie('token') || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+
+    try {
+      const res = await fetch('http://localhost:8000/student/chat/history', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        
+        const formattedData: HistoryItem[] = (result.data || []).map((item: any) => {
+          const createdAt = new Date(item.created_at);
+          const timeStr = createdAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+          const dateStr = createdAt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+          return {
+            id: String(item.id),
+            activity: item.prompt,
+            timestamp: `${dateStr}, ${timeStr}`,
+            status: 'Completed',
+            file_path: item.file_path,
+            conversation: [
+              {
+                id: `u-${item.id}`,
+                sender: 'user',
+                text: item.prompt,
+                time: timeStr
+              },
+              {
+                id: `ai-${item.id}`,
+                sender: 'ai',
+                text: item.response,
+                time: timeStr
+              }
+            ]
+          };
+        });
+
+        setHistoryList(formattedData);
+      }
+    } catch (err) {
+      console.error('Gagal mengambil data riwayat:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
 
   const handleLogout = () => {
+    eraseCookie('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     router.push('/login');
   };
 
-  const handleDeleteItem = (e: React.MouseEvent, id: string) => {
+  const handleDeleteItem = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     if (confirm('Apakah Anda yakin ingin menghapus riwayat ini?')) {
-      setHistoryList((prev) => prev.filter((item) => item.id !== id));
-      if (selectedItem?.id === id) {
-        setSelectedItem(null);
+      const token = getCookie('token') || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+      try {
+        const res = await fetch(`http://localhost:8000/student/chat/history/${id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          setHistoryList((prev) => prev.filter((item) => item.id !== id));
+          if (selectedItem?.id === id) {
+            setSelectedItem(null);
+          }
+        }
+      } catch (err) {
+        console.error('Gagal menghapus riwayat:', err);
       }
     }
   };
@@ -108,7 +151,7 @@ export default function HistoryPage() {
             <span>Riwayat Aktivitas Akademik</span>
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Daftar rekam jejak aktivitas, tugas, dan partisipasi lomba Anda selama perkuliahan.
+            Daftar rekam jejak konsultasi Tanya AI dan analisis lomba Anda.
           </p>
         </div>
 
@@ -124,7 +167,11 @@ export default function HistoryPage() {
 
       {/* Daftar Riwayat Aktivitas */}
       <div className="bg-[#0c142b] border border-slate-800 rounded-3xl p-6 shadow-xl">
-        {historyList.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-12 text-slate-400 text-sm">
+            Memuat riwayat percakapan...
+          </div>
+        ) : historyList.length === 0 ? (
           <div className="text-center py-12 text-slate-500 text-sm">
             Belum ada riwayat aktivitas yang tersimpan.
           </div>
@@ -135,7 +182,6 @@ export default function HistoryPage() {
                 key={item.id}
                 className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#070b19] border border-slate-800/80 rounded-2xl hover:border-cyan-500/50 transition-all gap-3 group"
               >
-                {/* Bagian Kiri (Menggunakan tag button asli tanpa nested button error) */}
                 <button
                   type="button"
                   onClick={() => setSelectedItem(item)}
@@ -145,30 +191,23 @@ export default function HistoryPage() {
                     <FileText className="w-5 h-5 text-cyan-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white text-sm sm:text-base group-hover:text-cyan-300 transition-colors">
+                    <h4 className="font-semibold text-white text-sm sm:text-base group-hover:text-cyan-300 transition-colors line-clamp-1">
                       {item.activity}
                     </h4>
                     <span className="text-xs text-slate-400 flex items-center space-x-1 mt-1">
                       <Clock className="w-3.5 h-3.5" />
                       <span>{item.timestamp}</span>
+                      {item.file_path && (
+                        <span className="ml-2 text-cyan-400">
+                          (📄 Berkas Terlampir)
+                        </span>
+                      )}
                     </span>
                   </div>
                 </button>
 
-                {/* Bagian Kanan (Status & Tombol Hapus) */}
                 <div className="flex items-center space-x-3 self-end sm:self-center">
-                  {item.score && (
-                    <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
-                      Nilai: {item.score}
-                    </span>
-                  )}
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      item.status === 'Completed'
-                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                    }`}
-                  >
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
                     {item.status}
                   </span>
 
@@ -191,7 +230,6 @@ export default function HistoryPage() {
       {selectedItem && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-[#0c142b] border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
-            {/* Header Modal */}
             <div className="p-6 bg-[#0e162f] border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
@@ -211,7 +249,6 @@ export default function HistoryPage() {
               </button>
             </div>
 
-            {/* Isi Percakapan */}
             <div className="p-6 overflow-y-auto space-y-4 flex-1 bg-[#070b19]">
               {selectedItem.conversation && selectedItem.conversation.length > 0 ? (
                 selectedItem.conversation.map((msg) => (
@@ -230,7 +267,7 @@ export default function HistoryPage() {
                     </div>
 
                     <div
-                      className={`max-w-md rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed ${
+                      className={`max-w-md rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
                         msg.sender === 'user'
                           ? 'bg-blue-600 text-white rounded-tr-none'
                           : 'bg-[#0c142b] border border-slate-800 text-slate-200 rounded-tl-none'
@@ -248,7 +285,6 @@ export default function HistoryPage() {
               )}
             </div>
 
-            {/* Footer Modal */}
             <div className="p-4 bg-[#0e162f] border-t border-slate-800 flex justify-end">
               <button
                 type="button"

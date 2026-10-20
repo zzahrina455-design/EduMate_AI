@@ -1,45 +1,154 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import { 
-  Users, 
-  Bot, 
-  Brain, 
-  Activity, 
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Users,
+  Bot,
+  Brain,
+  Activity,
   LogOut,
-  TrendingUp, 
+  TrendingUp,
   ShieldCheck,
   Clock,
   ChevronRight,
-  Server
-} from 'lucide-react';
+  Server,
+} from "lucide-react";
+
+interface DashboardStats {
+  total_users: number;
+  total_chat_sessions: number;
+  total_pitching_simulations: number;
+  ai_status: boolean;
+  weekly_usage_volume: { date: string; day: string; total_usage: number }[];
+}
+
+interface UserActivity {
+  id: number;
+  user_name: string;
+  user_email: string;
+  activity_type: string;
+  description: string;
+  created_at: string;
+}
 
 export default function AdminDashboardPage() {
   const router = useRouter();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [activities, setActivities] = useState<UserActivity[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const handleLogout = () => {
-    router.push('/login');
+  const API_BASE_URL = "http://127.0.0.1:8000";
+
+  // Fetch data dashboard dari Backend API menggunakan access_token
+  const fetchDashboardData = async () => {
+    try {
+      // PERBAIKAN: Mengambil key 'access_token' sesuai dengan yang disimpan LoginPage
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        console.error("Token tidak ditemukan di localStorage");
+        setLoading(false);
+        router.push("/login");
+        return;
+      }
+
+      const [resStats, resActivities] = await Promise.all([
+        fetch(`${API_BASE_URL}/admin/dashboard`, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Cache-Control": "no-cache"
+          },
+        }),
+        fetch(`${API_BASE_URL}/admin/activities`, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Cache-Control": "no-cache"
+          },
+        }),
+      ]);
+
+      if (resStats.ok && resActivities.ok) {
+        const statsData = await resStats.json();
+        const activitiesData = await resActivities.json();
+        setStats(statsData);
+        setActivities(activitiesData);
+      } else {
+        console.error("Respon backend gagal:", resStats.status, resActivities.status);
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data dashboard:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const stats = [
-    { title: 'Total Pengguna', value: '1,284', change: '+12% bulan ini', icon: Users, color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
-    { title: 'Sesi Tanya AI', value: '18,420', change: '+24% minggu ini', icon: Bot, color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-    { title: 'Simulasi Pitching', value: '3,150', change: '+8% minggu ini', icon: Brain, color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
-    { title: 'Status Model AI', value: 'Aktif 99.9%', change: 'EduMate Turbo v4', icon: Server, color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' }
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const handleLogout = () => {
+    // Hapus token & user dari LocalStorage serta cookie
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    router.push("/login");
+  };
+
+  if (loading) {
+    return (
+      <div className="p-8 text-slate-400 font-medium flex items-center justify-center min-h-screen bg-[#070b19]">
+        Memuat data dashboard...
+      </div>
+    );
+  }
+
+  const statCards = [
+    {
+      title: "Total Pengguna",
+      value: stats?.total_users?.toLocaleString() || "0",
+      change: "Sesuai pengguna terdaftar",
+      icon: Users,
+      color: "text-cyan-400",
+      bg: "bg-cyan-500/10 border-cyan-500/20",
+    },
+    {
+      title: "Sesi Tanya AI",
+      value: stats?.total_chat_sessions?.toLocaleString() || "0",
+      change: "Riwayat aktivitas tanya jawab",
+      icon: Bot,
+      color: "text-blue-400",
+      bg: "bg-blue-500/10 border-blue-500/20",
+    },
+    {
+      title: "Simulasi Pitching",
+      value: stats?.total_pitching_simulations?.toLocaleString() || "0",
+      change: "Riwayat latihan AI",
+      icon: Brain,
+      color: "text-purple-400",
+      bg: "bg-purple-500/10 border-purple-500/20",
+    },
+    {
+      title: "Status Model AI",
+      value: stats?.ai_status ? "Aktif" : "Nonaktif",
+      change: stats?.ai_status ? "Model siap melayani" : "Model dimatikan",
+      icon: Server,
+      color: stats?.ai_status ? "text-emerald-400" : "text-rose-400",
+      bg: stats?.ai_status
+        ? "bg-emerald-500/10 border-emerald-500/20"
+        : "bg-rose-500/10 border-rose-500/20",
+    },
   ];
 
-  const recentLogs = [
-    { id: '1', user: 'Zam Zam (H1D021005)', action: 'Mengunggah proposal &amp; memulai simulasi AI Juri', time: '5 menit lalu', type: 'Practice AI' },
-    { id: '2', user: 'Siti Rahma (H1D021012)', action: 'Mengirim dokumen PDF ke Tanya AI', time: '12 menit lalu', type: 'Tanya AI' },
-    { id: '3', user: 'Budi Santoso (H1D021045)', action: 'Mendaftar kompetisi Gemastik UI/UX', time: '25 menit lalu', type: 'Sistem' },
-    { id: '4', user: 'Ahmad Rizky (H1D021088)', action: 'Memperbarui informasi profil mahasiswa', time: '1 jam lalu', type: 'Profil' }
-  ];
+  const maxUsage = Math.max(
+    10,
+    ...(stats?.weekly_usage_volume?.map((d) => d.total_usage) || [1])
+  );
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      {/* Header Banner &amp; Logout */}
-      <div className="bg-[#0e162f] border border-slate-800 rounded-3xl p-6 lg:p-8 flex items-center justify-between gap-4">
+    <div className="space-y-6 animate-fadeIn p-6 lg:p-8 bg-[#070b19] min-h-screen text-slate-200">
+      {/* Header Banner & Logout */}
+      <div className="bg-[#0e162f] border border-slate-800 rounded-3xl p-6 lg:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center space-x-2">
             <ShieldCheck className="w-7 h-7 text-cyan-400" />
@@ -50,7 +159,7 @@ export default function AdminDashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 shrink-0">
+        <div className="flex items-center space-x-3 shrink-0 self-end md:self-auto">
           <div className="hidden sm:flex items-center space-x-3 bg-[#070b19] border border-slate-800/80 px-4 py-2 rounded-2xl">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-xs font-bold text-white shadow-md">
               AD
@@ -71,19 +180,26 @@ export default function AdminDashboardPage() {
 
       {/* Grid Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {stats.map((s) => {
+        {statCards.map((s) => {
           const IconComp = s.icon;
           return (
-            <div key={s.title} className="bg-[#0c142b] border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+            <div
+              key={s.title}
+              className="bg-[#0c142b] border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4 shadow-xl"
+            >
               <div className="flex justify-between items-start">
-                <span className="text-xs font-medium text-slate-400">{s.title}</span>
+                <span className="text-xs font-medium text-slate-400">
+                  {s.title}
+                </span>
                 <div className={`p-2.5 rounded-xl border ${s.bg}`}>
                   <IconComp className={`w-5 h-5 ${s.color}`} />
                 </div>
               </div>
               <div>
-                <span className="text-2xl font-black text-white block">{s.value}</span>
-                <span className="text-[11px] text-slate-400 mt-1 block flex items-center space-x-1">
+                <span className="text-2xl font-black text-white block">
+                  {s.value}
+                </span>
+                <span className="text-[11px] text-slate-400 mt-1 flex items-center space-x-1">
                   <TrendingUp className="w-3 h-3 text-emerald-400 inline mr-1" />
                   {s.change}
                 </span>
@@ -93,10 +209,9 @@ export default function AdminDashboardPage() {
         })}
       </div>
 
-      {/* Activity Analytics &amp; Recent Logs */}
+      {/* Activity Analytics & Recent Logs */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Grafik Visualisasi AI Usage Mockup */}
-        <div className="lg:col-span-2 bg-[#0c142b] border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6 shadow-xl">
+        <div className="lg:col-span-2 bg-[#0c142b] border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6 shadow-xl flex flex-col justify-between">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h2 className="text-lg font-bold text-white flex items-center space-x-2">
               <Activity className="w-5 h-5 text-cyan-400" />
@@ -108,27 +223,22 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="h-48 flex items-end justify-between gap-3 pt-6 px-2">
-            {[
-              { day: 'Sen', val: 65 },
-              { day: 'Sel', val: 80 },
-              { day: 'Rab', val: 45 },
-              { day: 'Kam', val: 95 },
-              { day: 'Jum', val: 75 },
-              { day: 'Sab', val: 110 },
-              { day: 'Ming', val: 88 }
-            ].map((d) => (
-              <div key={d.day} className="flex-1 flex flex-col items-center gap-2 group">
-                <div 
-                  className="w-full bg-gradient-to-t from-blue-600 to-cyan-400 rounded-t-xl transition-all duration-300 group-hover:brightness-125"
-                  style={{ height: `${d.val}px` }}
-                />
-                <span className="text-xs text-slate-400 font-medium">{d.day}</span>
-              </div>
-            ))}
+            {stats?.weekly_usage_volume?.map((d, idx) => {
+              const heightPx = Math.max(12, Math.round((d.total_usage / maxUsage) * 140));
+              return (
+                <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
+                  <div
+                    title={`${d.total_usage} aktivitas`}
+                    className="w-full bg-gradient-to-t from-blue-600 to-cyan-400 rounded-t-xl transition-all duration-300 group-hover:brightness-125"
+                    style={{ height: `${heightPx}px` }}
+                  />
+                  <span className="text-xs text-slate-400 font-medium">{d.day}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Live Activity Feed Log */}
         <div className="bg-[#0c142b] border border-slate-800 rounded-3xl p-6 space-y-4 shadow-xl flex flex-col justify-between">
           <div>
             <h2 className="text-base font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
@@ -136,24 +246,44 @@ export default function AdminDashboardPage() {
               <span>Aktivitas Pengguna Terbaru</span>
             </h2>
 
-            <div className="mt-4 space-y-3">
-              {recentLogs.map((log) => (
-                <div key={log.id} className="bg-[#070b19] border border-slate-800 p-3 rounded-2xl text-xs space-y-1">
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold text-white">{log.user}</span>
-                    <span className="text-[10px] text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">{log.type}</span>
+            <div className="mt-4 space-y-3 max-h-[280px] overflow-y-auto pr-1">
+              {activities.length === 0 ? (
+                <p className="text-xs text-slate-500 py-4 text-center">
+                  Belum ada aktivitas tercatat.
+                </p>
+              ) : (
+                activities.map((act) => (
+                  <div
+                    key={act.id}
+                    className="bg-[#070b19] border border-slate-800 p-3 rounded-2xl text-xs space-y-1"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-white">
+                        {act.user_name}
+                      </span>
+                      <span className="text-[10px] text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">
+                        {act.activity_type}
+                      </span>
+                    </div>
+                    <p className="text-slate-400 text-[11px] leading-relaxed">
+                      {act.description || act.activity_type}
+                    </p>
+                    <span className="text-[10px] text-slate-500 block text-right">
+                      {new Date(act.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
-                  <p className="text-slate-400 text-[11px] leading-relaxed">{log.action}</p>
-                  <span className="text-[10px] text-slate-500 block text-right">{log.time}</span>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
           <button
             type="button"
-            onClick={() => router.push('/admin/history')}
-            className="w-full bg-[#070b19] hover:bg-slate-800 border border-slate-700 text-slate-300 font-medium text-xs py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2"
+            onClick={() => router.push("/admin/history")}
+            className="w-full bg-[#070b19] hover:bg-slate-800 border border-slate-700 text-slate-300 font-medium text-xs py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 mt-4"
           >
             <span>Lihat Seluruh Riwayat</span>
             <ChevronRight className="w-4 h-4" />

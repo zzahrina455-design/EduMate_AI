@@ -13,13 +13,12 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      // Mengirim request ke backend FastAPI melalui rewrites Next.js (/api/auth/login)
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -34,12 +33,13 @@ export default function LoginPage() {
         throw new Error(data.detail || 'Login gagal. Periksa kembali email dan password.');
       }
 
-      // Simpan JWT token dan data user ke localStorage & cookie
+      // Simpan JWT token dengan nama 'token' DAN 'access_token' agar kompatibel di semua komponen
+      localStorage.setItem('token', data.access_token);
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
       document.cookie = `access_token=${data.access_token}; path=/; max-age=86400; SameSite=Lax`;
 
-      // Redirect berdasarkan role dari database PostgreSQL (admin vs non-admin)
+      // Redirect berdasarkan role dari database
       if (data.user.role === 'admin') {
         router.push('/admin/dashboard');
       } else {
