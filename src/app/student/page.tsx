@@ -76,7 +76,7 @@ export default function StudentDashboardPage() {
           <span>Info Lomba Terbaru</span>
         </div>
         <div className="relative w-full overflow-hidden whitespace-nowrap">
-          <div className="inline-block animate-[marquee_25s_linear_infinite] text-sm text-slate-300 font-medium">
+          <div className="inline-block animate-[marquee_45s_linear_infinite] text-sm text-slate-300 font-medium">
             {competitions.map((comp) => (
               <Link key={comp.id} href="/student/courses" className="mx-6 hover:text-cyan-400 transition-colors">
                 🔥 <strong className="text-white">{comp.title}</strong> — Tenggat: {comp.deadline} ({comp.location}) &nbsp;&nbsp;|&nbsp;&nbsp;
