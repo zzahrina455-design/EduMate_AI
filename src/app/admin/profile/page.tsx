@@ -1,22 +1,64 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, Save, ShieldCheck } from 'lucide-react';
 
 export default function AdminProfilePage() {
   const router = useRouter();
 
+  // 1. State awal dikosongkan, menunggu data dari backend
   const [adminProfile, setAdminProfile] = useState({
-    name: 'Administrator Utama',
-    nip: '199208152019031002',
-    department: 'Pusat Komputer & Akademik',
-    email: 'admin.edumate@unsoed.ac.id',
-    phone: '+62 811-9876-5432',
-    avatar: 'AD'
+    name: '',
+    nip: '',
+    department: '',
+    email: '',
+    phone: '',
+    avatar: 'A'
   });
 
   const [isSaved, setIsSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 2. AMBIL DATA DARI BACKEND SAAT HALAMAN DIBUKA
+  useEffect(() => {
+    const fetchAdminProfile = async () => {
+      try {
+        const token = localStorage.getItem('token') || localStorage.getItem('access_token');
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        // Catatan: Jika kamu memiliki endpoint khusus admin (misal: /admin/profile), ubah URL di bawah.
+        // Jika tidak, endpoint /student/profile yang kita buat sebelumnya tetap bisa dipakai 
+        // karena ia mendeteksi user berdasarkan token yang login.
+        const response = await fetch('http://localhost:8000/student/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setAdminProfile(prev => ({
+            ...prev,
+            name: data.name || '',
+            email: data.email || '',
+            // Mapping sementara: menggunakan kolom 'major' di database untuk menyimpan 'department' admin
+            department: data.major || '',
+            avatar: data.name ? data.name.substring(0, 2).toUpperCase() : 'AD'
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching admin profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAdminProfile();
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,19 +68,48 @@ export default function AdminProfilePage() {
     }));
   };
 
-  const handleSave = (e: React.ChangeEvent<HTMLFormElement>) => {
+  // 3. SIMPAN PERUBAHAN KE BACKEND
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('access_token');
+      
+      const response = await fetch('http://localhost:8000/student/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: adminProfile.name,
+          major: adminProfile.department, // Disimpan ke kolom major di database
+          // nip dan phone belum ada di database, jadi tidak dikirim agar tidak error
+        })
+      });
+
+      if (response.ok) {
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error updating admin profile:", error);
+    }
   };
 
+  // 4. LOGIKA LOGOUT MENGHAPUS TOKEN
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
     router.push('/login');
   };
 
+  if (isLoading) {
+    return <div className="text-white text-center py-10 animate-pulse">Memuat data administrator...</div>;
+  }
+
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Header Banner dengan Lencana Profil Admin di Ujung Kanan */}
+      {/* Header Banner */}
       <div className="bg-[#0e162f] border border-slate-800 rounded-3xl p-6 lg:p-8 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center space-x-2">
@@ -57,7 +128,7 @@ export default function AdminProfilePage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Card Profil Kiri &amp; Tombol Keluar */}
+        {/* Card Profil Kiri & Tombol Keluar */}
         <div className="bg-[#0c142b] border border-slate-800 rounded-3xl p-6 text-center flex flex-col items-center justify-between">
           <div className="flex flex-col items-center w-full">
             <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-3xl font-bold text-white shadow-xl mb-4 border-2 border-cyan-400/30">
@@ -131,8 +202,8 @@ export default function AdminProfilePage() {
                   type="text"
                   name="email"
                   value={adminProfile.email}
-                  onChange={handleChange}
-                  className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
+                  disabled // Email didisable agar kredensial login admin tidak terganggu
+                  className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed focus:outline-none transition-all"
                 />
               </div>
 

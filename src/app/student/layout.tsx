@@ -54,8 +54,7 @@ export default function StudentLayout({
   const navItems = [
     { label: 'Beranda', href: '/student', icon: Home },
     { label: 'Tanya AI', href: '/student/chat', icon: Bot },
-    { label: 'Latihan AI', href: '/student/pitching', icon: Brain },
-    { label: 'Info Lomba', href: '/student/competitions', icon: Trophy },
+    { label: 'Latihan AI', href: '/student/practice', icon: Brain },
     { label: 'Riwayat', href: '/student/history', icon: Clock },
     { label: 'Profil', href: '/student/profile', icon: User },
   ];

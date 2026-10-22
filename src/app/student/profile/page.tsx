@@ -1,23 +1,63 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, LogOut, Save } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
 
+  // State default dikosongkan terlebih dahulu
   const [userProfile, setUserProfile] = useState({
-    name: 'Zam Zam',
-    nim: 'H1D021005',
-    major: 'Informatika',
-    faculty: 'Teknik',
-    email: 'zamzam@student.ac.id',
-    phone: '+62 812-3456-7890',
-    avatar: 'ZZ'
+    name: '',
+    nim: '',
+    major: '',
+    faculty: '',
+    email: '',
+    phone: '',
+    avatar: 'U'
   });
 
   const [isSaved, setIsSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 1. AMBIL DATA DARI BACKEND SAAT HALAMAN DIBUKA
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Asumsi token disimpan dengan nama 'access_token' atau 'token' di localStorage saat login
+        const token = localStorage.getItem('token') || localStorage.getItem('access_token'); 
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        const response = await fetch('http://localhost:8000/student/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserProfile(prev => ({
+            ...prev,
+            name: data.name || '',
+            email: data.email || '',
+            major: data.major || '',
+            // Mengambil inisial avatar dari 2 huruf pertama nama (jika ada)
+            avatar: data.name ? data.name.substring(0, 2).toUpperCase() : 'U'
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,15 +67,45 @@ export default function ProfilePage() {
     }));
   };
 
-  const handleSave = (e: React.ChangeEvent) => {
+  // 2. SIMPAN PERUBAHAN KE BACKEND
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('access_token');
+      
+      const response = await fetch('http://localhost:8000/student/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: userProfile.name,
+          major: userProfile.major,
+          // Catatan: nim, faculty, dan phone belum ada di models.py backend.
+          // Jadi sementara hanya name dan major yang kita kirimkan agar tidak error.
+        })
+      });
+
+      if (response.ok) {
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
+  // 3. LOGIKA LOGOUT DIUBAH AGAR MENGHAPUS TOKEN
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
     router.push('/login');
   };
+
+  if (isLoading) {
+    return <div className="text-white text-center py-10 animate-pulse">Memuat profil...</div>;
+  }
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -134,8 +204,8 @@ export default function ProfilePage() {
                   type="text"
                   name="email"
                   value={userProfile.email}
-                  onChange={handleChange}
-                  className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
+                  disabled // Disarankan email tidak bisa diubah karena untuk login
+                  className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed focus:outline-none transition-all"
                 />
               </div>
               <div>
