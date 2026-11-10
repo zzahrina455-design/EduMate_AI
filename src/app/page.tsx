@@ -18,20 +18,12 @@ import {
   Mail,
   Phone,
   MapPin,
-  Send,
   CheckCircle2,
   Clock
 } from 'lucide-react';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [contactSubmitted, setContactSubmitted] = useState(false);
-
-  const handleContactSubmit = (e: React.ChangeEvent) => {
-    e.preventDefault();
-    setContactSubmitted(true);
-    setTimeout(() => setContactSubmitted(false), 5000);
-  };
 
   return (
     <div className="min-h-screen flex flex-col justify-between text-slate-100 relative overflow-x-hidden bg-[#0A1128] scroll-smooth">
@@ -294,7 +286,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ================= SEKSI KONTAK & PERTANYAAN ================= */}
+      {/* ================= SEKSI KONTAK ================= */}
       <section id="kontak" className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-24 relative z-10 border-t border-white/10">
         <div className="text-center space-y-4 max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-900/60 border border-cyan-500/30 text-xs text-cyan-300">
@@ -302,129 +294,52 @@ export default function LandingPage() {
             <span>HUBUNGI KAMI</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
-            Ada Pertanyaan atau Ingin <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Bekerja Sama?</span>
+            Informasi <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Kontak Kami</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Tim EduMate AI siap membantu dan menemani kalian dalam belajar.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Kartu Informasi Kontak Terpusat (Centered Layout) */}
+        <div className="max-w-xl mx-auto bg-slate-900/50 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 space-y-6">
+          <h3 className="text-base font-bold text-white border-b border-white/10 pb-3 text-center">
+            Informasi Kontak
+          </h3>
           
-          <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-6">
-            <h3 className="text-base font-bold text-white border-b border-white/10 pb-3">Informasi Kontak</h3>
-            
-            <div className="space-y-4 text-xs text-slate-300">
-              <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="block font-semibold text-white">Email Resmi</span>
-                  <span>edumate.ai@gmail.com</span>
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs text-slate-300">
+            <div className="flex items-start space-x-3">
+              <Mail className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="block font-semibold text-white">Email Resmi</span>
+                <span>edumate.ai@gmail.com</span>
               </div>
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="block font-semibold text-white">Layanan Telepon / WhatsApp</span>
-                  <span>+62 812-3456-7890</span>
-                </div>
+            <div className="flex items-start space-x-3">
+              <Phone className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="block font-semibold text-white">Layanan Telepon / WA</span>
+                <span>+62 812-3456-7890</span>
               </div>
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="block font-semibold text-white">Kantor Pusat</span>
-                  <span>Universitas Sebelas Maret</span>
-                </div>
+            <div className="flex items-start space-x-3">
+              <MapPin className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="block font-semibold text-white">Kantor Pusat</span>
+                <span>Universitas Sebelas Maret</span>
               </div>
+            </div>
 
-              <div className="flex items-start space-x-3">
-                <Clock className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="block font-semibold text-white">Jam Operasional Tim</span>
-                  <span>Senin - Jumat: 08:00 - 17:00 WIB</span>
-                </div>
+            <div className="flex items-start space-x-3">
+              <Clock className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="block font-semibold text-white">Jam Operasional</span>
+                <span>Senin - Jumat: 08:00 - 17:00 WIB</span>
               </div>
             </div>
           </div>
-
-          {/* Form Kirim Pesan dengan Label & Input Terhubung */}
-          <div className="lg:col-span-2 bg-slate-900/50 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10">
-            {contactSubmitted ? (
-              <div className="text-center py-12 space-y-3">
-                <CheckCircle2 className="w-12 h-12 text-cyan-400 mx-auto animate-bounce" />
-                <h4 className="text-lg font-bold text-white">Pesan Terkirim!</h4>
-                <p className="text-xs text-slate-300">Terima kasih telah menghubungi kami. Tim kami akan segera merespons pesan Anda.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="fullName" className="block text-xs font-medium text-slate-300 mb-1">
-                      Nama Lengkap
-                    </label>
-                    <input 
-                      id="fullName"
-                      type="text" 
-                      required 
-                      placeholder="Masukkan nama Anda..."
-                      className="w-full bg-slate-950/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-medium text-slate-300 mb-1">
-                      Email Akademik / Pribadi
-                    </label>
-                    <input 
-                      id="email"
-                      type="email" 
-                      required 
-                      placeholder="nama@kampus.ac.id"
-                      className="w-full bg-slate-950/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="role" className="block text-xs font-medium text-slate-300 mb-1">
-                    Peran / Perihal
-                  </label>
-                  <select 
-                    id="role"
-                    className="w-full bg-slate-950/80 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 transition"
-                  >
-                    <option value="mahasiswa">Mahasiswa - Pertanyaan Platform</option>
-                    <option value="dosen">Dosen - Konsultasi Upload Modul & RPS</option>
-                    <option value="kampus">Perwakilan Kampus - Kerjasama Sistem RAG</option>
-                    <option value="lainnya">Lainnya</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-xs font-medium text-slate-300 mb-1">
-                    Pesan Anda
-                  </label>
-                  <textarea 
-                    id="message"
-                    rows={4} 
-                    required 
-                    placeholder="Tuliskan pesan atau pertanyaan Anda di sini..."
-                    className="w-full bg-slate-950/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
-                  />
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-xs shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition flex items-center justify-center space-x-2"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Kirim Pesan</span>
-                </button>
-              </form>
-            )}
-          </div>
-
         </div>
       </section>
 
@@ -458,7 +373,6 @@ export default function LandingPage() {
             <span className="block font-bold text-white uppercase text-[11px] tracking-wider mb-2">Akses Pengguna</span>
             <ul className="space-y-1.5 text-slate-400">
               <li><Link href="/login" className="hover:text-cyan-400 transition">Portal Mahasiswa</Link></li>
-              <li><Link href="/login" className="hover:text-cyan-400 transition">Portal Dosen Pengampu</Link></li>
               <li><Link href="/login" className="hover:text-cyan-400 transition">Administrator Kampus</Link></li>
               <li><Link href="/register" className="hover:text-cyan-400 transition">Pendaftaran Akun Baru</Link></li>
             </ul>
