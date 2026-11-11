@@ -7,7 +7,6 @@ import { LogOut, Save, ShieldCheck } from 'lucide-react';
 export default function AdminProfilePage() {
   const router = useRouter();
 
-  // 1. State awal dikosongkan, menunggu data dari backend
   const [adminProfile, setAdminProfile] = useState({
     name: '',
     nip: '',
@@ -20,7 +19,7 @@ export default function AdminProfilePage() {
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 2. AMBIL DATA DARI BACKEND SAAT HALAMAN DIBUKA
+  // 1. AMBIL DATA DARI BACKEND ADMIN SAAT HALAMAN DIBUKA
   useEffect(() => {
     const fetchAdminProfile = async () => {
       try {
@@ -30,10 +29,8 @@ export default function AdminProfilePage() {
           return;
         }
 
-        // Catatan: Jika kamu memiliki endpoint khusus admin (misal: /admin/profile), ubah URL di bawah.
-        // Jika tidak, endpoint /student/profile yang kita buat sebelumnya tetap bisa dipakai 
-        // karena ia mendeteksi user berdasarkan token yang login.
-        const response = await fetch('http://localhost:8000/student/profile', {
+        // Menggunakan endpoint khusus admin melalui proxy /api
+        const response = await fetch('/api/admin/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -44,9 +41,10 @@ export default function AdminProfilePage() {
           setAdminProfile(prev => ({
             ...prev,
             name: data.name || '',
+            nip: data.nim || '',           // Memetakan nim database ke NIP admin
+            department: data.faculty || '', // Memetakan faculty database ke Unit/Departemen
             email: data.email || '',
-            // Mapping sementara: menggunakan kolom 'major' di database untuk menyimpan 'department' admin
-            department: data.major || '',
+            phone: data.phone || '',       // Memetakan phone database ke Kontak Darurat
             avatar: data.name ? data.name.substring(0, 2).toUpperCase() : 'AD'
           }));
         }
@@ -68,13 +66,13 @@ export default function AdminProfilePage() {
     }));
   };
 
-  // 3. SIMPAN PERUBAHAN KE BACKEND
+  // 2. SIMPAN PERUBAHAN KE BACKEND ADMIN
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('access_token');
       
-      const response = await fetch('http://localhost:8000/student/profile', {
+      const response = await fetch('/api/admin/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -82,21 +80,24 @@ export default function AdminProfilePage() {
         },
         body: JSON.stringify({
           name: adminProfile.name,
-          major: adminProfile.department, // Disimpan ke kolom major di database
-          // nip dan phone belum ada di database, jadi tidak dikirim agar tidak error
+          nim: adminProfile.nip,          // Mengirim nip ke kolom nim database
+          faculty: adminProfile.department, // Mengirim unit/departemen ke kolom faculty database
+          phone: adminProfile.phone       // Mengirim kontak darurat ke kolom phone database
         })
       });
 
       if (response.ok) {
         setIsSaved(true);
         setTimeout(() => setIsSaved(false), 3000);
+      } else {
+        const errData = await response.json();
+        console.error("Gagal menyimpan profil admin:", errData);
       }
     } catch (error) {
       console.error("Error updating admin profile:", error);
     }
   };
 
-  // 4. LOGIKA LOGOUT MENGHAPUS TOKEN
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('access_token');
@@ -134,8 +135,8 @@ export default function AdminProfilePage() {
             <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-3xl font-bold text-white shadow-xl mb-4 border-2 border-cyan-400/30">
               {adminProfile.avatar}
             </div>
-            <h2 className="text-xl font-bold text-white">{adminProfile.name}</h2>
-            <p className="text-cyan-400 text-sm font-medium mt-0.5">{adminProfile.nip}</p>
+            <h2 className="text-xl font-bold text-white">{adminProfile.name || 'Administrator'}</h2>
+            <p className="text-cyan-400 text-sm font-medium mt-0.5">{adminProfile.nip || 'Belum ada NIP'}</p>
             <div className="mt-4 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold">
               Super Admin Access
             </div>
@@ -144,7 +145,7 @@ export default function AdminProfilePage() {
           <button
             type="button"
             onClick={handleLogout}
-            className="mt-8 w-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center space-x-2"
+            className="mt-8 w-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Keluar dari Akun</span>
@@ -179,6 +180,7 @@ export default function AdminProfilePage() {
                   name="nip"
                   value={adminProfile.nip}
                   onChange={handleChange}
+                  placeholder="Contoh: 19850101..."
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -191,6 +193,7 @@ export default function AdminProfilePage() {
                   name="department"
                   value={adminProfile.department}
                   onChange={handleChange}
+                  placeholder="Contoh: Direktorat TI"
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -202,7 +205,7 @@ export default function AdminProfilePage() {
                   type="text"
                   name="email"
                   value={adminProfile.email}
-                  disabled // Email didisable agar kredensial login admin tidak terganggu
+                  disabled
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed focus:outline-none transition-all"
                 />
               </div>
@@ -215,6 +218,7 @@ export default function AdminProfilePage() {
                   name="phone"
                   value={adminProfile.phone}
                   onChange={handleChange}
+                  placeholder="Contoh: 081234567890"
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -230,7 +234,7 @@ export default function AdminProfilePage() {
               )}
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium text-sm px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-950/50 flex items-center space-x-2"
+                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium text-sm px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-950/50 flex items-center space-x-2 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>Simpan Perubahan</span>

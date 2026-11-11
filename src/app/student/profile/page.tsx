@@ -25,14 +25,14 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Asumsi token disimpan dengan nama 'access_token' atau 'token' di localStorage saat login
         const token = localStorage.getItem('token') || localStorage.getItem('access_token'); 
         if (!token) {
           router.push('/login');
           return;
         }
 
-        const response = await fetch('http://localhost:8000/student/profile', {
+        // Menggunakan jalur proxy /api agar bebas dari masalah CORS
+        const response = await fetch('/api/student/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -43,8 +43,11 @@ export default function ProfilePage() {
           setUserProfile(prev => ({
             ...prev,
             name: data.name || '',
-            email: data.email || '',
+            nim: data.nim || '',
             major: data.major || '',
+            faculty: data.faculty || '',
+            email: data.email || '',
+            phone: data.phone || '',
             // Mengambil inisial avatar dari 2 huruf pertama nama (jika ada)
             avatar: data.name ? data.name.substring(0, 2).toUpperCase() : 'U'
           }));
@@ -73,7 +76,8 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('access_token');
       
-      const response = await fetch('http://localhost:8000/student/profile', {
+      // Menggunakan jalur proxy /api
+      const response = await fetch('/api/student/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -81,22 +85,26 @@ export default function ProfilePage() {
         },
         body: JSON.stringify({
           name: userProfile.name,
+          nim: userProfile.nim,
           major: userProfile.major,
-          // Catatan: nim, faculty, dan phone belum ada di models.py backend.
-          // Jadi sementara hanya name dan major yang kita kirimkan agar tidak error.
+          faculty: userProfile.faculty,
+          phone: userProfile.phone
         })
       });
 
       if (response.ok) {
         setIsSaved(true);
         setTimeout(() => setIsSaved(false), 3000);
+      } else {
+        const errData = await response.json();
+        console.error("Gagal menyimpan profil:", errData);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
     }
   };
 
-  // 3. LOGIKA LOGOUT DIUBAH AGAR MENGHAPUS TOKEN
+  // 3. LOGIKA LOGOUT
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('access_token');
@@ -127,8 +135,8 @@ export default function ProfilePage() {
             <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-3xl font-bold text-white shadow-xl mb-4 border-2 border-cyan-400/30">
               {userProfile.avatar}
             </div>
-            <h2 className="text-xl font-bold text-white">{userProfile.name}</h2>
-            <p className="text-cyan-400 text-sm font-medium mt-0.5">{userProfile.nim}</p>
+            <h2 className="text-xl font-bold text-white">{userProfile.name || 'Mahasiswa'}</h2>
+            <p className="text-cyan-400 text-sm font-medium mt-0.5">{userProfile.nim || 'Belum ada NIM'}</p>
             <div className="mt-4 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold">
               Mahasiswa Aktif
             </div>
@@ -138,7 +146,7 @@ export default function ProfilePage() {
           <button
             type="button"
             onClick={handleLogout}
-            className="mt-8 w-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center space-x-2"
+            className="mt-8 w-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Keluar dari Akun</span>
@@ -172,6 +180,7 @@ export default function ProfilePage() {
                   name="nim"
                   value={userProfile.nim}
                   onChange={handleChange}
+                  placeholder="Contoh: M0522001"
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -194,6 +203,7 @@ export default function ProfilePage() {
                   name="faculty"
                   value={userProfile.faculty}
                   onChange={handleChange}
+                  placeholder="Contoh: FMIPA"
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -204,7 +214,7 @@ export default function ProfilePage() {
                   type="text"
                   name="email"
                   value={userProfile.email}
-                  disabled // Disarankan email tidak bisa diubah karena untuk login
+                  disabled // Email tidak bisa diubah karena untuk autentikasi login
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed focus:outline-none transition-all"
                 />
               </div>
@@ -216,6 +226,7 @@ export default function ProfilePage() {
                   name="phone"
                   value={userProfile.phone}
                   onChange={handleChange}
+                  placeholder="Contoh: 081234567890"
                   className="w-full bg-[#070b19] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"
                 />
               </div>
@@ -231,7 +242,7 @@ export default function ProfilePage() {
               )}
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium text-sm px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-950/50 flex items-center space-x-2"
+                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium text-sm px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-950/50 flex items-center space-x-2 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>Simpan Perubahan</span>
